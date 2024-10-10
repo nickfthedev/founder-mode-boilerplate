@@ -1,0 +1,32 @@
+services:
+  # app:
+  #   build: .
+  #   # ports:
+  #   #   - "8080:8080"
+  #   volumes:
+  #     - ./public:/public
+  #     - ./db:/db
+
+  # DEV ONLY
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - psql_volume:/var/lib/postgresql/data
+    profiles: ["dev"]
+
+  stripecli:
+    image: stripe/stripe-cli:latest
+    volumes:
+      - ~/.stripe:/root/.stripe
+    command: listen --forward-to host.docker.internal:3000/api/webhooks/stripe
+    network_mode: "host"
+    profiles: ["dev"]
+
+volumes:
+  psql_volume:
