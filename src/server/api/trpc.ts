@@ -131,3 +131,17 @@ export const protectedProcedure = t.procedure
       },
     });
   });
+
+/**
+ * Admin procedure
+ *
+ * If the user is not an admin, a TRPCError is thrown.
+ */
+export const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (!ctx.session?.user?.isAdmin) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({
+    ctx: { ...ctx.session, user: ctx.session.user },
+  });
+});

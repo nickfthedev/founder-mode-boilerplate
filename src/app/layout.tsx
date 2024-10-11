@@ -12,13 +12,13 @@ import { Sheet, SheetTrigger, SheetContent } from "~/components/ui/sheet";
 import {
   ActivityIcon,
   HomeIcon,
-  LayoutGridIcon,
   MenuIcon,
   MountainIcon,
+  NewspaperIcon,
   UsersIcon,
 } from "lucide-react";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
-import { getServerSession } from "next-auth";
+import { getServerAuthSession } from "~/server/auth";
 import SidebarUserMenu from "~/components/layout/sidebar-usermenu";
 import { ThemeProvider } from "next-themes";
 import { CookieBanner } from "~/components/cookie-banner/cookieBanner";
@@ -26,7 +26,7 @@ import { Toaster } from "~/components/ui/toaster";
 
 const navigation = [
   { href: "/", label: "Home", icon: HomeIcon },
-  { href: "/products", label: "Products", icon: LayoutGridIcon },
+  { href: "/blog", label: "Blog", icon: NewspaperIcon },
   { href: "/customers", label: "Customers", icon: UsersIcon },
   { href: "/analytics", label: "Analytics", icon: ActivityIcon },
 ];
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const session = await getServerSession();
+  const session = await getServerAuthSession();
 
   return (
     <html

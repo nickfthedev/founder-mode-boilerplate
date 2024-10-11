@@ -5,9 +5,7 @@ import { api, HydrateClient } from "~/trpc/server";
 import { env } from "~/env";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
   const session = await getServerAuthSession();
-  void api.post.getLatest.prefetch();
 
   const appUrl = env.APP_URL;
   const appName = env.APP_NAME;

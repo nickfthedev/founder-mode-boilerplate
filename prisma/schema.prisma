@@ -14,16 +14,20 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
+model BlogPost {
     id        Int      @id @default(autoincrement())
-    name      String
+    title     String
+    slug      String   @unique
+    published Boolean  @default(false)
+    content   String
+    keywords  String[]
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
 
-    @@index([name])
+    @@index([title])
 }
 
 // Necessary for Next auth
@@ -59,10 +63,11 @@ model User {
     name          String?
     email         String?   @unique
     emailVerified DateTime?
+    isAdmin       Boolean   @default(false)
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    posts         BlogPost[]
 }
 
 model VerificationToken {
