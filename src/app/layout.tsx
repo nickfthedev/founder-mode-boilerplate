@@ -7,35 +7,16 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 import Link from "next/link";
 import { env } from "~/env";
-import { Button } from "~/components/ui/button";
-import { Sheet, SheetTrigger, SheetContent } from "~/components/ui/sheet";
-import {
-  ActivityIcon,
-  HomeIcon,
-  MenuIcon,
-  MountainIcon,
-  NewspaperIcon,
-  UsersIcon,
-} from "lucide-react";
-import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import { MountainIcon } from "lucide-react";
 import { getServerAuthSession } from "~/server/auth";
-import { SidebarUserMenu, Sidebar } from "~/components/layout/sidebar";
+import {
+  SidebarUserMenu,
+  SidebarMobile,
+  SidebarDesktop,
+} from "~/components/layout/sidebar";
 import { ThemeProvider } from "next-themes";
 import { CookieBanner } from "~/components/cookie-banner/cookieBanner";
 import { Toaster } from "~/components/ui/toaster";
-
-export type Navigation = {
-  href: string;
-  label: string;
-  icon: React.ElementType;
-};
-
-const navigation: Navigation[] = [
-  { href: "/", label: "Home", icon: HomeIcon },
-  { href: "/blog", label: "Blog", icon: NewspaperIcon },
-  { href: "/customers", label: "Customers", icon: UsersIcon },
-  { href: "/analytics", label: "Analytics", icon: ActivityIcon },
-];
 
 export const metadata: Metadata = {
   title: env.APP_NAME,
@@ -69,21 +50,9 @@ export default async function RootLayout({
                       <MountainIcon className="h-6 w-6" />
                       <span className="font-mono text-lg">{env.APP_NAME}</span>
                     </Link>
-                    <nav className="space-y-1">
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                          prefetch={false}
-                        >
-                          <item.icon className="h-5 w-5" />
-                          {item.label}
-                        </Link>
-                      ))}
-                    </nav>
+                    <SidebarDesktop />
                   </div>
-                  <SidebarUserMenu session={session} />
+                  <SidebarUserMenu user={session?.user} />
                 </div>
               </div>
               <div className="flex-1">
@@ -96,39 +65,7 @@ export default async function RootLayout({
                       <MountainIcon className="h-6 w-6" />
                       <span className="font-mono text-lg">{env.APP_NAME}</span>
                     </Link>
-                    <Sheet>
-                      <SheetTrigger asChild>
-                        <Button variant="outline" size="icon">
-                          <MenuIcon className="h-6 w-6" />
-                          <span className="sr-only">Toggle navigation</span>
-                        </Button>
-                      </SheetTrigger>
-                      <SheetContent side="left" className="w-64">
-                        <DialogTitle className="sr-only">
-                          Navigation
-                        </DialogTitle>
-                        <DialogDescription className="sr-only">
-                          Navigation menu
-                        </DialogDescription>
-                        <div className="flex h-full flex-col justify-between px-4 py-6">
-                          <div className="space-y-6">
-                            <nav className="space-y-1">
-                              {navigation.map((item) => (
-                                <Link
-                                  key={item.href}
-                                  href={item.href}
-                                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                                >
-                                  <item.icon className="h-5 w-5" />
-                                  {item.label}
-                                </Link>
-                              ))}
-                            </nav>
-                          </div>
-                          <SidebarUserMenu session={session} />
-                        </div>
-                      </SheetContent>
-                    </Sheet>
+                    <SidebarMobile user={session?.user} />
                   </div>
                 </header>
                 <main className="p-4 lg:p-8">{children}</main>
