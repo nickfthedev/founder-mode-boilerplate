@@ -1,8 +1,8 @@
 import EditBlogPostForm from "~/components/blog/edit-blog-post-form";
-import { Button } from "~/components/ui/button";
 import { getServerAuthSession } from "~/server/auth";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import BackButton from "~/components/common/back-button";
+import { api } from "~/trpc/server";
+import { canEditBlogPost } from "~/types/blog.types";
 
 export default async function EditBlogPage({
   params,
@@ -11,18 +11,23 @@ export default async function EditBlogPage({
 }) {
   const session = await getServerAuthSession();
 
-  if (!session?.user || !session.user.isAdmin) {
+  if (!session?.user) {
+    return <div>Unauthorized</div>;
+  }
+
+  const post = await api.blog.getBlogPostBySlug(params.slug);
+
+  if (!post || !canEditBlogPost({ user: session.user, post })) {
     return <div>Unauthorized</div>;
   }
 
   return (
     <div className="flex flex-col justify-center gap-2">
-      <Button asChild variant="ghost" size="icon">
-        <Link href="/blog">
-          <ArrowLeft className="text-muted-foreground" />
-        </Link>
-      </Button>
-      <EditBlogPostForm slug={params.slug} />
+      <div className="flex flex-row items-center gap-4">
+        <BackButton />
+        <h1 className="text-2xl font-bold">Edit Blog Post</h1>
+      </div>
+      <EditBlogPostForm post={post} user={session.user} />
     </div>
   );
 }

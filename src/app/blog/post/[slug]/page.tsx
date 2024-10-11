@@ -17,22 +17,23 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { slug } = params;
-  const parentTitle = (await parent).title ?? "";
+  const parentData = await parent;
+  const parentTitle = parentData.title?.absolute ?? "";
   const post = await api.blog.getBlogPostBySlug(slug);
 
   if (!post || !post.published) {
     return {
-      title: "Post Not Found" + parentTitle,
+      title: "Post Not Found | " + parentTitle,
     };
   }
 
   return {
-    title: post.title + parentTitle,
+    title: post.title + " | " + parentTitle,
     description: post.content.slice(0, 150),
     ...(post.keywords &&
       post.keywords.length > 0 && { keywords: post.keywords }),
     openGraph: {
-      title: post.title + parentTitle,
+      title: post.title + " | " + parentTitle,
       description: post.content.slice(0, 150),
     },
   };

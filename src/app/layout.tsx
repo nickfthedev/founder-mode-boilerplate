@@ -19,12 +19,18 @@ import {
 } from "lucide-react";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { getServerAuthSession } from "~/server/auth";
-import SidebarUserMenu from "~/components/layout/sidebar-usermenu";
+import SidebarUserMenu from "~/components/layout/sidebar";
 import { ThemeProvider } from "next-themes";
 import { CookieBanner } from "~/components/cookie-banner/cookieBanner";
 import { Toaster } from "~/components/ui/toaster";
 
-const navigation = [
+type Navigation = {
+  href: string;
+  label: string;
+  icon: React.ElementType;
+};
+
+const navigation: Navigation[] = [
   { href: "/", label: "Home", icon: HomeIcon },
   { href: "/blog", label: "Blog", icon: NewspaperIcon },
   { href: "/customers", label: "Customers", icon: UsersIcon },
@@ -81,7 +87,7 @@ export default async function RootLayout({
                 </div>
               </div>
               <div className="flex-1">
-                <header className="sticky top-0 z-10 border-b px-4 py-3 lg:hidden">
+                <header className="sticky top-0 z-10 border-b bg-background/80 px-4 py-3 backdrop-blur-sm lg:hidden">
                   <div className="flex items-center justify-between">
                     <Link
                       href={env.APP_URL}
