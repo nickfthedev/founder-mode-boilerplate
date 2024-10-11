@@ -19,12 +19,12 @@ import {
 } from "lucide-react";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import { getServerAuthSession } from "~/server/auth";
-import SidebarUserMenu from "~/components/layout/sidebar";
+import { SidebarUserMenu, Sidebar } from "~/components/layout/sidebar";
 import { ThemeProvider } from "next-themes";
 import { CookieBanner } from "~/components/cookie-banner/cookieBanner";
 import { Toaster } from "~/components/ui/toaster";
 
-type Navigation = {
+export type Navigation = {
   href: string;
   label: string;
   icon: React.ElementType;

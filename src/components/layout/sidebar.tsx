@@ -12,12 +12,13 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { LogOutIcon, PlusIcon } from "lucide-react";
 import { canPostBlogPosts } from "~/types/blog.types";
+import type { Navigation } from "~/app/layout";
 
-export default function SidebarUserMenu({
-  session,
-}: {
-  session: Session | null;
-}) {
+export function Sidebar({ navigation }: { navigation: Navigation[] }) {
+  return <div></div>;
+}
+
+export function SidebarUserMenu({ session }: { session: Session | null }) {
   return (
     <div className="space-y-4">
       {session ? (
