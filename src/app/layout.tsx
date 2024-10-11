@@ -11,7 +11,6 @@ import { Button } from "~/components/ui/button";
 import { Sheet, SheetTrigger, SheetContent } from "~/components/ui/sheet";
 import {
   ActivityIcon,
-  GlobeIcon,
   HomeIcon,
   LayoutGridIcon,
   MenuIcon,
@@ -24,6 +23,13 @@ import SidebarUserMenu from "~/components/layout/sidebar-usermenu";
 import { ThemeProvider } from "next-themes";
 import { CookieBanner } from "~/components/cookie-banner/cookieBanner";
 import { Toaster } from "~/components/ui/toaster";
+
+const navigation = [
+  { href: "/", label: "Home", icon: HomeIcon },
+  { href: "/products", label: "Products", icon: LayoutGridIcon },
+  { href: "/customers", label: "Customers", icon: UsersIcon },
+  { href: "/analytics", label: "Analytics", icon: ActivityIcon },
+];
 
 export const metadata: Metadata = {
   title: env.APP_NAME,
@@ -58,38 +64,17 @@ export default async function RootLayout({
                       <span className="font-mono text-lg">{env.APP_NAME}</span>
                     </Link>
                     <nav className="space-y-1">
-                      <Link
-                        href="#"
-                        className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                        prefetch={false}
-                      >
-                        <HomeIcon className="h-5 w-5" />
-                        Home
-                      </Link>
-                      <Link
-                        href="#"
-                        className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                        prefetch={false}
-                      >
-                        <LayoutGridIcon className="h-5 w-5" />
-                        Products
-                      </Link>
-                      <Link
-                        href="#"
-                        className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                        prefetch={false}
-                      >
-                        <UsersIcon className="h-5 w-5" />
-                        Customers
-                      </Link>
-                      <Link
-                        href="#"
-                        className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                        prefetch={false}
-                      >
-                        <ActivityIcon className="h-5 w-5" />
-                        Analytics
-                      </Link>
+                      {navigation.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
+                          prefetch={false}
+                        >
+                          <item.icon className="h-5 w-5" />
+                          {item.label}
+                        </Link>
+                      ))}
                     </nav>
                   </div>
                   <SidebarUserMenu session={session} />
@@ -123,38 +108,17 @@ export default async function RootLayout({
                         <div className="flex h-full flex-col justify-between px-4 py-6">
                           <div className="space-y-6">
                             <nav className="space-y-1">
-                              <Link
-                                href="#"
-                                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                                prefetch={false}
-                              >
-                                <HomeIcon className="h-5 w-5" />
-                                Home
-                              </Link>
-                              <Link
-                                href="#"
-                                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                                prefetch={false}
-                              >
-                                <LayoutGridIcon className="h-5 w-5" />
-                                Products
-                              </Link>
-                              <Link
-                                href="#"
-                                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                                prefetch={false}
-                              >
-                                <UsersIcon className="h-5 w-5" />
-                                Customers
-                              </Link>
-                              <Link
-                                href="#"
-                                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-                                prefetch={false}
-                              >
-                                <ActivityIcon className="h-5 w-5" />
-                                Analytics
-                              </Link>
+                              {navigation.map((item) => (
+                                <Link
+                                  key={item.href}
+                                  href={item.href}
+                                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
+                                  prefetch={false}
+                                >
+                                  <item.icon className="h-5 w-5" />
+                                  {item.label}
+                                </Link>
+                              ))}
                             </nav>
                           </div>
                           <SidebarUserMenu session={session} />
