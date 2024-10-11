@@ -22,9 +22,7 @@ function BackButton({
       className={className}
       onClick={() => router.back()}
     >
-      <Link href="/dashboard/">
-        <ArrowLeft className="w-5 h-5 text-muted-foreground" />
-      </Link>
+      <ArrowLeft className="h-5 w-5 text-muted-foreground" />
     </Button>
   );
 }

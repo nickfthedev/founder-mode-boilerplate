@@ -3,7 +3,7 @@
 import { useToast } from "~/hooks/use-toast";
 import { api } from "~/trpc/react";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function TogglePublishedButton({
   slug,
@@ -13,16 +13,16 @@ export function TogglePublishedButton({
   published: boolean;
 }) {
   const utils = api.useUtils();
+  const router = useRouter();
   const { toast } = useToast();
-  const [isPublished, setIsPublished] = useState(published);
   const togglePublish = api.blog.togglePublished.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
-        title: `Post ${isPublished ? "unpublished" : "published"}`,
+        title: `Post ${published ? "unpublished" : "published"}`,
       });
-      setIsPublished(!isPublished);
-      utils.blog.getBlogPostBySlug.invalidate();
-      utils.blog.getBlogPosts.invalidate();
+      await utils.blog.getBlogPostBySlug.invalidate(slug);
+      await utils.blog.getBlogPosts.invalidate();
+      router.refresh();
     },
     onError: (error) => {
       toast({
@@ -38,7 +38,7 @@ export function TogglePublishedButton({
       onClick={() => togglePublish.mutate(slug)}
       disabled={togglePublish.isPending}
     >
-      {isPublished ? "Unpublish" : "Publish"}
+      {published ? "Unpublish" : "Publish"}
     </Button>
   );
 }
