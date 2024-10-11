@@ -61,7 +61,7 @@ export const blogRouter = createTRPCRouter({
   /**
    * Function to update a blog post
    */
-  updateBlogPost: adminProcedure.input(UpdateBlogPostSchema).mutation(async ({ input, ctx }) => {
+  updateBlogPost: protectedProcedure.input(UpdateBlogPostSchema).mutation(async ({ input, ctx }) => {
     const { title, content, slug, published, keywords, asPageOwner } = input;
     const post = await ctx.db.blogPost.findUnique({
       where: { slug },
@@ -81,7 +81,7 @@ export const blogRouter = createTRPCRouter({
   /**
    * Function to toggle the published status of a blog post
    */
-  togglePublished: adminProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
+  togglePublished: protectedProcedure.input(z.string()).mutation(async ({ input, ctx }) => {
     const post = await ctx.db.blogPost.findUnique({
       where: { slug: input },
     });
