@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
-import { LogOutIcon, PlusIcon, MenuIcon } from "lucide-react";
+import { LogOutIcon, PlusIcon, MenuIcon, FileIcon } from "lucide-react";
 import { canPostBlogPosts } from "~/types/blog.types";
 import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
 import { UserRole } from "~/types/user.types";
@@ -28,8 +28,6 @@ export type Navigation = {
 const navigation: Navigation[] = [
   { href: "/", label: "Home", icon: HomeIcon },
   { href: "/blog", label: "Blog", icon: NewspaperIcon },
-  { href: "/customers", label: "Customers", icon: UsersIcon },
-  { href: "/analytics", label: "Analytics", icon: ActivityIcon },
 ];
 
 /**
@@ -125,12 +123,23 @@ export function SidebarUserMenu({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {canPostBlogPosts({ user }) && (
-              <Link href="/blog/new" onClick={() => setOpen && setOpen(false)}>
-                <DropdownMenuItem>
-                  <PlusIcon className="mr-2 h-4 w-4" />
-                  New Blogpost
-                </DropdownMenuItem>
-              </Link>
+              <>
+                <Link
+                  href="/blog/new"
+                  onClick={() => setOpen && setOpen(false)}
+                >
+                  <DropdownMenuItem>
+                    <PlusIcon className="mr-2 h-4 w-4" />
+                    New Blogpost
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/blog/my" onClick={() => setOpen && setOpen(false)}>
+                  <DropdownMenuItem>
+                    <FileIcon className="mr-2 h-4 w-4" />
+                    My Blogposts
+                  </DropdownMenuItem>
+                </Link>
+              </>
             )}
             <Link
               href="/api/auth/signout"

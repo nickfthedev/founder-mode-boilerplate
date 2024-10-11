@@ -7,24 +7,68 @@ export const blogRouter = createTRPCRouter({
   /**
    * Function to get all blog posts
    */
-  getBlogPosts: publicProcedure.query(async ({ ctx }) => {
+  getBlogPosts: publicProcedure.input(z.object({ limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
     const blogPosts = await ctx.db.blogPost.findMany({
       orderBy: { createdAt: "desc" },
+      take: input?.limit,
     });
     return blogPosts;
   }),
   /**
    * Function to get published blog posts
    */
-  getPublishedBlogPosts: publicProcedure.input(z.number().optional()).query(async ({ input, ctx }) => {
+  getPublishedBlogPosts: publicProcedure.input(z.object({ limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
     const blogPosts = await ctx.db.blogPost.findMany({
       where: { published: true },
       orderBy: { createdAt: "desc" },
-      take: input,
+      take: input?.limit,
     });
     return blogPosts;
   }),
   /**
+   * Function to get page owner blog posts
+   */
+  getPageOwnerBlogPosts: publicProcedure.input(z.object({ limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
+    const blogPosts = await ctx.db.blogPost.findMany({
+      where: { asPageOwner: true, published: true },
+      orderBy: { createdAt: "desc" },
+      take: input?.limit,
+    });
+    return blogPosts;
+  }),
+  /**
+   * Function to get user's own blog posts
+   */
+  getUserSelfBlogPosts: protectedProcedure.query(async ({ ctx }) => {
+    const blogPosts = await ctx.db.blogPost.findMany({
+      where: { createdById: ctx.session?.user.id },
+      orderBy: { createdAt: "desc" },
+    });
+    return blogPosts;
+  }),
+  /**
+   * Function to get all blog posts from users
+   */
+  getUsersBlogPosts: publicProcedure.input(z.object({ limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
+    const blogPosts = await ctx.db.blogPost.findMany({
+      where: { asPageOwner: false, published: true },
+      orderBy: { createdAt: "desc" },
+      take: input?.limit,
+    });
+    return blogPosts;
+  }),
+  /**
+   * Function to get all blog posts from a user by userId
+   */
+  getUserBlogPostsByUserId: publicProcedure.input(z.object({ userId: z.string(), limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
+    const blogPosts = await ctx.db.blogPost.findMany({
+      where: { createdById: input?.userId, published: true },
+      orderBy: { createdAt: "desc" },
+      take: input?.limit,
+    });
+    return blogPosts;
+  }),
+  /** 
    * Function to get a blog post by slug
    */
   getBlogPostBySlug: publicProcedure.input(z.string()).query(async ({ input, ctx }) => {
