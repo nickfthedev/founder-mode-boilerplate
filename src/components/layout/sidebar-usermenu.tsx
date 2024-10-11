@@ -10,7 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { LogOutIcon } from "lucide-react";
+import { LogOutIcon, PlusIcon } from "lucide-react";
+import { canPostBlogPosts } from "~/types/blog.types";
 
 export default function SidebarUserMenu({
   session,
@@ -31,7 +32,14 @@ export default function SidebarUserMenu({
               Hello, {session.user?.name}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-
+            {canPostBlogPosts({ user: session.user }) && (
+              <Link href="/blog/new">
+                <DropdownMenuItem>
+                  <PlusIcon className="mr-2 h-4 w-4" />
+                  New Blogpost
+                </DropdownMenuItem>
+              </Link>
+            )}
             <Link href="/api/auth/signout">
               <DropdownMenuItem>
                 <LogOutIcon className="mr-2 h-4 w-4" />

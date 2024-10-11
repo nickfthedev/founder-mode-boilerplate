@@ -14,6 +14,11 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+    ADMIN
+    USER
+}
+
 model BlogPost {
     id        Int      @id @default(autoincrement())
     title     String
@@ -21,6 +26,7 @@ model BlogPost {
     published Boolean  @default(false)
     content   String
     keywords  String[]
+    asPageOwner Boolean  @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -63,7 +69,7 @@ model User {
     name          String?
     email         String?   @unique
     emailVerified DateTime?
-    isAdmin       Boolean   @default(false)
+    userRole      UserRole    @default(USER)
     image         String?
     accounts      Account[]
     sessions      Session[]

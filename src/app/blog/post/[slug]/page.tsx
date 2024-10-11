@@ -6,6 +6,7 @@ import { MarkdownRenderer } from "~/components/common/markdown-renderer";
 import { Button } from "~/components/ui/button";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+import { canEditBlogPost, canSeeBlogPost } from "~/types/blog.types";
 
 type Props = {
   params: { slug: string };
@@ -16,30 +17,22 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { slug } = params;
+  const parentTitle = (await parent).title ?? "";
   const post = await api.blog.getBlogPostBySlug(slug);
 
-  if (!post) {
+  if (!post || !post.published) {
     return {
-      title: "Post Not Found",
+      title: "Post Not Found" + parentTitle,
     };
   }
 
-  if (!post.published) {
-    const session = await getServerAuthSession();
-    if (!session?.user || !session.user.isAdmin) {
-      return {
-        title: "Post Not Found",
-      };
-    }
-  }
-
   return {
-    title: "Bewerbungsfoto-ai.de - " + post.title,
+    title: post.title + parentTitle,
     description: post.content.slice(0, 150),
     ...(post.keywords &&
       post.keywords.length > 0 && { keywords: post.keywords }),
     openGraph: {
-      title: "Bewerbungsfoto-ai.de - " + post.title,
+      title: post.title + parentTitle,
       description: post.content.slice(0, 150),
     },
   };
@@ -50,13 +43,11 @@ export default async function BlogPostPage({ params }: Props) {
   const session = await getServerAuthSession();
   const post = await api.blog.getBlogPostBySlug(slug);
 
-  if (!post || !post.published) {
-    if (!session?.user || !session.user.isAdmin) {
-      return <div>Post not found</div>;
-    }
+  if (!post) {
+    return <div>Post not found</div>;
   }
 
-  if (!post) {
+  if (!canSeeBlogPost({ user: session?.user, post })) {
     return <div>Post not found</div>;
   }
 
@@ -65,7 +56,7 @@ export default async function BlogPostPage({ params }: Props) {
       <div className="flex justify-between gap-2">
         <BackButton />
         <div className="flex gap-2">
-          {session?.user?.isAdmin && (
+          {canEditBlogPost({ user: session?.user, post }) && (
             <>
               <TogglePublishedButton
                 slug={post.slug}
