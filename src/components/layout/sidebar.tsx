@@ -18,6 +18,7 @@ import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
 import { UserRole } from "~/types/user.types";
 import { HomeIcon, NewspaperIcon, UsersIcon, ActivityIcon } from "lucide-react";
 import { useState } from "react";
+import { canCreatePages } from "~/types/page.types";
 
 export type Navigation = {
   href: string;
@@ -57,7 +58,11 @@ export function SidebarDesktop() {
 export function SidebarMobile({
   user,
 }: {
-  user?: { name?: string | null; userRole: UserRole };
+  user?: {
+    name?: string | null;
+    userRole: UserRole;
+    bannedFromPosting: boolean;
+  };
 }) {
   const [open, setOpen] = useState(false);
 
@@ -105,7 +110,11 @@ export function SidebarUserMenu({
   user,
   setOpen,
 }: {
-  user?: { name?: string | null; userRole: UserRole };
+  user?: {
+    name?: string | null;
+    userRole: UserRole;
+    bannedFromPosting: boolean;
+  };
   setOpen?: (open: boolean) => void;
 }) {
   return (
@@ -139,6 +148,28 @@ export function SidebarUserMenu({
                     My Blogposts
                   </DropdownMenuItem>
                 </Link>
+              </>
+            )}
+            <DropdownMenuSeparator />
+            {canCreatePages({ user }) && (
+              <>
+                <Link
+                  href="/page/new"
+                  onClick={() => setOpen && setOpen(false)}
+                >
+                  <DropdownMenuItem>
+                    <PlusIcon className="mr-2 h-4 w-4" />
+                    New Page
+                  </DropdownMenuItem>
+                </Link>
+                <Link href={"/page"} onClick={() => setOpen && setOpen(false)}>
+                  <DropdownMenuItem>
+                    <FileIcon className="mr-2 h-4 w-4" />
+                    All Pages
+                  </DropdownMenuItem>
+                </Link>
+
+                <DropdownMenuSeparator />
               </>
             )}
             <Link

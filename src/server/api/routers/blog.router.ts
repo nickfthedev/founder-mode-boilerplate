@@ -65,6 +65,9 @@ export const blogRouter = createTRPCRouter({
       where: { createdById: input?.userId, published: true },
       orderBy: { createdAt: "desc" },
       take: input?.limit,
+      include: {
+        createdBy: true,
+      }
     });
     return blogPosts;
   }),
@@ -74,6 +77,9 @@ export const blogRouter = createTRPCRouter({
   getBlogPostBySlug: publicProcedure.input(z.string()).query(async ({ input, ctx }) => {
     const blogPost = await ctx.db.blogPost.findUnique({
       where: { slug: input },
+      include: {
+        createdBy: true,
+      }
     });
     return blogPost;
   }),

@@ -36,6 +36,21 @@ model BlogPost {
     @@index([title])
 }
 
+model Page {
+    id        Int      @id @default(autoincrement())
+    title     String
+    slug      String   @unique
+    published Boolean  @default(false)
+    content   String
+    keywords  String[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdById String
+
+    @@index([title])
+}
 // Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
@@ -71,9 +86,11 @@ model User {
     emailVerified DateTime?
     userRole      UserRole    @default(USER)
     image         String?
+    bannedFromPosting Boolean @default(false)
     accounts      Account[]
     sessions      Session[]
     posts         BlogPost[]
+    pages         Page[]
 }
 
 model VerificationToken {

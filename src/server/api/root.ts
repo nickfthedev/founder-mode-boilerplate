@@ -1,4 +1,5 @@
 import { blogRouter } from "~/server/api/routers/blog.router";
+import { pageRouter } from "~/server/api/routers/page.router";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -7,6 +8,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  page: pageRouter,
   blog: blogRouter,
 });
 

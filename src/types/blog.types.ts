@@ -16,8 +16,11 @@ export const UpdateBlogPostSchema = NewBlogPostSchema.extend({
 });
 
 
-export function canEditBlogPost({ user, post }: { user?: { id: string, userRole: UserRole }, post: { createdById: string, asPageOwner: boolean } }) {
+export function canEditBlogPost({ user, post }: { user?: { id: string, userRole: UserRole, bannedFromPosting: boolean }, post: { createdById: string, asPageOwner: boolean } }) {
   if (!user) {
+    return false;
+  }
+  if (user.bannedFromPosting) {
     return false;
   }
   // If a user loses his page owner rights, he should not be able to edit the post anymore
@@ -35,8 +38,11 @@ export function canEditBlogPost({ user, post }: { user?: { id: string, userRole:
   return false;
 }
 
-export function canPostBlogPosts({ user }: { user?: { userRole: UserRole } }) {
+export function canPostBlogPosts({ user }: { user?: { userRole: UserRole, bannedFromPosting: boolean } }) {
   if (!user) {
+    return false;
+  }
+  if (user.bannedFromPosting) {
     return false;
   }
   return APP_CONFIG.canPostBlogPosts.includes(user.userRole);

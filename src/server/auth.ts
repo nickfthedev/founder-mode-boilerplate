@@ -21,6 +21,7 @@ declare module "next-auth" {
     user: {
       id: string;
       // ...other properties
+      bannedFromPosting: boolean;
       userRole: "ADMIN" | "USER";
     } & DefaultSession["user"];
   }
@@ -28,6 +29,7 @@ declare module "next-auth" {
   interface User {
     // ...other properties
     userRole: "ADMIN" | "USER";
+    bannedFromPosting: boolean;
   }
 }
 
@@ -44,6 +46,7 @@ export const authOptions: NextAuthOptions = {
         ...session.user,
         id: user.id,
         userRole: user.userRole,
+        bannedFromPosting: user.bannedFromPosting,
       },
     }),
   },

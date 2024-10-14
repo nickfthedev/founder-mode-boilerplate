@@ -2,7 +2,10 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { api, HydrateClient } from "~/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
-import { canPostBlogPosts } from "~/types/blog.types";
+import {
+  canPostBlogPostAsPageOwner,
+  canPostBlogPosts,
+} from "~/types/blog.types";
 import { BlogPostList } from "~/components/blog/blog-post-list";
 import { env } from "~/env";
 import { APP_CONFIG } from "~/config/app.config";
@@ -18,7 +21,7 @@ export default async function BlogPage() {
   return (
     <HydrateClient>
       <div className="flex flex-col gap-4">
-        {session && canPostBlogPosts({ user: session.user }) && (
+        {session && canPostBlogPostAsPageOwner({ user: session.user }) && (
           <Button asChild className="w-fit" variant={"outline"} size={"sm"}>
             <Link href="/blog/new">New Post</Link>
           </Button>

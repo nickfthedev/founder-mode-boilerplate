@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { canEditBlogPost, canSeeBlogPost } from "~/types/blog.types";
+import { env } from "~/env";
 
 type Props = {
   params: { slug: string };
@@ -72,9 +73,27 @@ export default async function BlogPostPage({ params }: Props) {
       </div>
       <div className="flex w-full flex-col gap-2 px-2 py-4">
         <div className="text-2xl font-bold">{post.title}</div>
-        <span className="text-sm text-muted-foreground">
-          {post.createdAt.toLocaleDateString()}
-        </span>
+        <div className="flex flex-col gap-2 md:flex-row">
+          <span className="text-sm text-muted-foreground">
+            Author:{" "}
+            {post.asPageOwner ? (
+              env.APP_NAME
+            ) : (
+              <Link
+                href={`/blog/user/${post.createdBy.id}`}
+                className="text-primary hover:underline"
+              >
+                {post.createdBy.name}
+              </Link>
+            )}
+          </span>
+          <span className="text-sm text-muted-foreground">
+            Created: {post.createdAt.toLocaleDateString()}
+          </span>
+          <span className="text-sm text-muted-foreground">
+            Last edited: {post.updatedAt.toLocaleDateString()}
+          </span>
+        </div>
         <div className="prose dark:prose-invert">
           <MarkdownRenderer content={post.content} />
         </div>
