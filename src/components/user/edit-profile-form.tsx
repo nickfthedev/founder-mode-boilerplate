@@ -141,6 +141,7 @@ export default function EditProfileForm({
             <FormMessage />
           </FormItem>
 
+          {/* Name */}
           <FormField
             control={form.control}
             name="name"
@@ -148,13 +149,65 @@ export default function EditProfileForm({
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Title" {...field} />
+                  <Input placeholder="Name" {...field} />
                 </FormControl>
-                <FormDescription>Your name.</FormDescription>
+                <FormDescription>Your name</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* Username */}
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="Username" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Your username. Must be unique. Will be used for your public
+                  profile link.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Bio */}
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Input placeholder="Bio" {...field} />
+                </FormControl>
+                <FormDescription>Your bio</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Location */}
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                  <Input placeholder="Location" {...field} />
+                </FormControl>
+                <FormDescription>Your location</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Receive Marketing Emails */}
           <FormField
             control={form.control}
             name="acceptedMarketing"
@@ -177,6 +230,9 @@ export default function EditProfileForm({
             )}
           />
 
+          {/*
+           * Public Profile
+           */}
           <FormField
             control={form.control}
             name="public"
@@ -198,6 +254,159 @@ export default function EditProfileForm({
               </FormItem>
             )}
           />
+
+          <Button type="submit" disabled={isPending} className="w-full">
+            {isPending ? "Updating..." : "Update"}
+          </Button>
+          {/*
+           * Social Links
+           */}
+
+          <h1 className="text-xl font-semibold">Social Links</h1>
+          {/* Facebook */}
+          <FormField
+            control={form.control}
+            name="facebook"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Facebook</FormLabel>
+                <FormControl>
+                  <Input placeholder="Facebook" {...field} />
+                </FormControl>
+                <FormDescription>Your Facebook page</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Instagram */}
+          <FormField
+            control={form.control}
+            name="instagram"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Instagram</FormLabel>
+                <FormControl>
+                  <Input placeholder="Instagram" {...field} />
+                </FormControl>
+                <FormDescription>Your Instagram page</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Twitter */}
+          <FormField
+            control={form.control}
+            name="twitter"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Twitter</FormLabel>
+                <FormControl>
+                  <Input placeholder="Twitter" {...field} />
+                </FormControl>
+                <FormDescription>Your Twitter page</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* LinkedIn */}
+          <FormField
+            control={form.control}
+            name="linkedin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>LinkedIn</FormLabel>
+                <FormControl>
+                  <Input placeholder="LinkedIn" {...field} />
+                </FormControl>
+                <FormDescription>Your LinkedIn page</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* YouTube */}
+          <FormField
+            control={form.control}
+            name="youtube"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>YouTube</FormLabel>
+                <FormControl>
+                  <Input placeholder="YouTube" {...field} />
+                </FormControl>
+                <FormDescription>Your YouTube page</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* TikTok */}
+          <FormField
+            control={form.control}
+            name="tiktok"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>TikTok</FormLabel>
+                <FormControl>
+                  <Input placeholder="TikTok" {...field} />
+                </FormControl>
+                <FormDescription>Your TikTok page</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* GitHub */}
+          <FormField
+            control={form.control}
+            name="github"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>GitHub</FormLabel>
+                <FormControl>
+                  <Input placeholder="GitHub" {...field} />
+                </FormControl>
+                <FormDescription>Your GitHub page</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Discord */}
+          <FormField
+            control={form.control}
+            name="discord"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Discord</FormLabel>
+                <FormControl>
+                  <Input placeholder="Discord" {...field} />
+                </FormControl>
+                <FormDescription>Your Discord page</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Twitch */}
+          <FormField
+            control={form.control}
+            name="twitch"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Twitch</FormLabel>
+                <FormControl>
+                  <Input placeholder="Twitch" {...field} />
+                </FormControl>
+                <FormDescription>Your Twitch page</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <Button type="submit" disabled={isPending} className="w-full">
             {isPending ? "Updating..." : "Update"}
           </Button>
