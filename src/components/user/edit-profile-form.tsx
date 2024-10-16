@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateProfileSchema } from "~/types/user.types";
 import { useToast } from "~/hooks/use-toast";
 import { Input } from "../ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { Switch } from "../ui/switch";
@@ -41,13 +41,28 @@ async function uploadFile(file: File): Promise<string> {
 interface EditProfileFormProps {
   email?: string | null | undefined;
   name?: string | null | undefined;
-  // acceptedMarketing?: boolean;
+  username?: string | null | undefined;
+  bio?: string | null | undefined;
+  public?: boolean;
+  location?: string | null | undefined;
+  website?: string | null | undefined;
+  twitter?: string | null | undefined;
+  instagram?: string | null | undefined;
+  facebook?: string | null | undefined;
+  linkedin?: string | null | undefined;
+  youtube?: string | null | undefined;
+  tiktok?: string | null | undefined;
+  github?: string | null | undefined;
+  discord?: string | null | undefined;
+  twitch?: string | null | undefined;
 }
 
 export default function EditProfileForm({
   user,
+  acceptedMarketing,
 }: {
   user: EditProfileFormProps;
+  acceptedMarketing: boolean;
 }) {
   const { toast } = useToast();
 
@@ -55,6 +70,21 @@ export default function EditProfileForm({
     resolver: zodResolver(UpdateProfileSchema),
     defaultValues: {
       name: user.name ?? "",
+      acceptedMarketing: acceptedMarketing,
+      username: user.username ?? undefined,
+      bio: user.bio ?? undefined,
+      public: user.public ?? false,
+      location: user.location ?? undefined,
+      website: user.website ?? undefined,
+      twitter: user.twitter ?? undefined,
+      instagram: user.instagram ?? undefined,
+      facebook: user.facebook ?? undefined,
+      linkedin: user.linkedin ?? undefined,
+      youtube: user.youtube ?? undefined,
+      tiktok: user.tiktok ?? undefined,
+      github: user.github ?? undefined,
+      discord: user.discord ?? undefined,
+      twitch: user.twitch ?? undefined,
     },
   });
 
@@ -92,6 +122,10 @@ export default function EditProfileForm({
     mutate({ ...values /*, avatar: avatarUrl */ });
   }
 
+  useEffect(() => {
+    console.log(form.formState.errors);
+  }, [form.formState.errors]);
+
   return (
     <>
       <h1 className="text-2xl font-bold">Edit Profile</h1>
@@ -125,7 +159,7 @@ export default function EditProfileForm({
             control={form.control}
             name="acceptedMarketing"
             render={({ field }) => (
-              <FormItem className="">
+              <FormItem>
                 <div className="flex items-center gap-2">
                   <FormLabel>Receive Marketing Emails</FormLabel>
                   <FormControl>
@@ -137,6 +171,28 @@ export default function EditProfileForm({
                 </div>
                 <FormDescription>
                   You will receive marketing emails from us.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="public"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center gap-2">
+                  <FormLabel>Public Profile</FormLabel>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </div>
+                <FormDescription>
+                  If enabled, your profile will be visible to everyone.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

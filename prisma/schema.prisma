@@ -82,6 +82,22 @@ model Session {
 model User {
     id            String    @id @default(cuid())
     name          String?
+    username      String?   @unique
+    bio           String?
+    location      String?
+    website       String?
+    public        Boolean   @default(false)
+    // Socials
+    twitter       String?
+    instagram     String?
+    facebook      String?
+    linkedin      String?
+    youtube       String?
+    tiktok        String?
+    github        String?
+    discord       String?
+    twitch        String?
+    // End Socials
     email         String?   @unique
     emailVerified DateTime?
     userRole      UserRole    @default(USER)

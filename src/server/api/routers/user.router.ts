@@ -6,7 +6,6 @@ const userRouter = createTRPCRouter({
   updateProfile: protectedProcedure.input(UpdateProfileSchema)
     .mutation(async ({ input, ctx }) => {
       const acceptedMarketing = input.acceptedMarketing ?? false
-      console.log("acceptedMarketing", acceptedMarketing)
       // Update Newsletter
       try {
         await ctx.db.newsletter.upsert({
@@ -32,6 +31,20 @@ const userRouter = createTRPCRouter({
           },
           data: {
             name: input.name,
+            username: input.username,
+            bio: input.bio,
+            location: input.location,
+            website: input.website,
+            public: input.public,
+            twitter: input.twitter,
+            instagram: input.instagram,
+            facebook: input.facebook,
+            linkedin: input.linkedin,
+            youtube: input.youtube,
+            tiktok: input.tiktok,
+            github: input.github,
+            discord: input.discord,
+            twitch: input.twitch,
           }
         })
       } catch (error: any) {
