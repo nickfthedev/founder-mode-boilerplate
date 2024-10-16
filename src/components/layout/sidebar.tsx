@@ -137,10 +137,7 @@ export function SidebarUserMenu({
               Hello, {user.name}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <Link
-              href="/user/profile"
-              onClick={() => setOpen && setOpen(false)}
-            >
+            <Link href="/profile" onClick={() => setOpen && setOpen(false)}>
               <DropdownMenuItem>
                 <UserCircle className="mr-2 h-4 w-4" />
                 My Profile

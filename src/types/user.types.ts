@@ -5,12 +5,17 @@ import { z } from "zod";
 
 export type UserRole = "ADMIN" | "USER";
 
+export function canAccessUserProfile({ user }: { user: { public: boolean } }) {
+  return user.public
+}
+
 export const UpdateProfileSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters long" }),
   avatar: z.string().optional(),
   acceptedMarketing: z.boolean().optional(),
   username: z.string().min(3, { message: "Username must be at least 3 characters long" })
-    .regex(/^[a-zA-Z0-9_]+$/, { message: "Username can only contain letters, numbers and _" })
+    .regex(/^[a-z0-9_]+$/, { message: "Username can only contain lowercase letters, numbers and _" })
+    .transform(val => val.toLowerCase())
     .optional(),
   public: z.boolean().optional(),
   bio: z.string().optional(),
@@ -83,3 +88,4 @@ export const UpdateProfileSchema = z.object({
     )
   ]).optional(),
 })
+

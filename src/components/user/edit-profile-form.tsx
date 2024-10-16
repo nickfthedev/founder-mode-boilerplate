@@ -128,8 +128,6 @@ export default function EditProfileForm({
 
   return (
     <>
-      <h1 className="text-2xl font-bold">Edit Profile</h1>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormItem>
@@ -202,6 +200,20 @@ export default function EditProfileForm({
                   <Input placeholder="Location" {...field} />
                 </FormControl>
                 <FormDescription>Your location</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="website"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Website</FormLabel>
+                <FormControl>
+                  <Input placeholder="Website" {...field} />
+                </FormControl>
+                <FormDescription>Your website</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
