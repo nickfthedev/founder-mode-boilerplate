@@ -39,23 +39,29 @@ export default async function RootLayout({
         <TRPCReactProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="flex h-screen w-full">
-              <div className="hidden lg:block lg:w-64 lg:shrink-0 lg:border-r">
+              <div className="hidden h-full lg:fixed lg:block lg:w-64 lg:shrink-0 lg:border-r">
                 <div className="flex h-full flex-col justify-between px-4 py-6">
-                  <div className="space-y-6">
-                    <Link
-                      href={env.APP_URL}
-                      className="flex items-center gap-2 font-bold"
-                      prefetch={false}
-                    >
-                      <MountainIcon className="h-6 w-6" />
-                      <span className="font-mono text-lg">{env.APP_NAME}</span>
-                    </Link>
-                    <SidebarDesktop />
+                  <div className="flex h-full flex-col">
+                    <div className="space-y-6">
+                      <Link
+                        href={env.APP_URL}
+                        className="flex items-center gap-2 font-bold"
+                        prefetch={false}
+                      >
+                        <MountainIcon className="h-6 w-6" />
+                        <span className="font-mono text-lg">
+                          {env.APP_NAME}
+                        </span>
+                      </Link>
+                      <SidebarDesktop />
+                    </div>
+                    <div className="mt-auto">
+                      <SidebarUserMenu user={session?.user} />
+                    </div>
                   </div>
-                  <SidebarUserMenu user={session?.user} />
                 </div>
               </div>
-              <div className="flex-1">
+              <div className="flex-1 lg:ml-64">
                 <header className="sticky top-0 z-10 border-b bg-background/80 px-4 py-3 backdrop-blur-sm lg:hidden">
                   <div className="flex items-center justify-between">
                     <Link
