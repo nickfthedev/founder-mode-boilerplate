@@ -12,7 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
-import { LogOutIcon, PlusIcon, MenuIcon, FileIcon } from "lucide-react";
+import {
+  LogOutIcon,
+  PlusIcon,
+  MenuIcon,
+  FileIcon,
+  UserCircle,
+} from "lucide-react";
 import { canPostBlogPosts } from "~/types/blog.types";
 import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
 import { UserRole } from "~/types/user.types";
@@ -130,6 +136,16 @@ export function SidebarUserMenu({
             <DropdownMenuLabel className="text-sm font-medium text-muted-foreground">
               Hello, {user.name}
             </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <Link
+              href="/user/profile"
+              onClick={() => setOpen && setOpen(false)}
+            >
+              <DropdownMenuItem>
+                <UserCircle className="mr-2 h-4 w-4" />
+                My Profile
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuSeparator />
             {canPostBlogPosts({ user }) && (
               <>
