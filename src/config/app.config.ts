@@ -8,6 +8,9 @@ export interface AppConfigInterface {
   canPostBlogPosts: UserRole[];
   canPostBlogPostAsPageOwner: UserRole[];
   canCreatePages: UserRole[];
+  emailProvider: string[];
+  fromName: string;
+  fromEmail: string;
 }
 
 export const APP_CONFIG: AppConfigInterface = {
@@ -18,5 +21,13 @@ export const APP_CONFIG: AppConfigInterface = {
   // Defines who can create, edit and delete pages
   // DON'T INCLUDE "USER" HERE, because that would allow everyone to create pages
   canCreatePages: ["ADMIN"],
+  // Email Provider
+  // RESEND: Send via Resend
+  // CONSOLE: Log to console
+  // Every provider in this array will be used in order to send an email
+  // Dont forget to add the credentials to the env file
+  emailProvider: ["CONSOLE"],
+  fromName: "Blog",
+  fromEmail: "blog@example.com",
 };
 
