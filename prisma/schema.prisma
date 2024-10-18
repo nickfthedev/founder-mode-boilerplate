@@ -87,6 +87,8 @@ model User {
     location      String?
     website       String?
     public        Boolean   @default(false)
+    // Stripe
+    stripeCustomerId String?
     // Socials
     twitter       String?
     instagram     String?

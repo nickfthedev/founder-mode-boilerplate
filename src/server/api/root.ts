@@ -1,6 +1,7 @@
 import { blogRouter } from "~/server/api/routers/blog.router";
 import { pageRouter } from "~/server/api/routers/page.router";
 import { userRouter } from "~/server/api/routers/user.router";
+import { stripeRouter } from "~/server/api/routers/stripe.router";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -12,6 +13,7 @@ export const appRouter = createTRPCRouter({
   page: pageRouter,
   blog: blogRouter,
   user: userRouter,
+  stripe: stripeRouter,
 });
 
 // export type definition of API
