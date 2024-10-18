@@ -13,11 +13,30 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p className="text-gray-500 dark:text-gray-400">
-        Welcome to your dashboard. Here you can manage your products, customers,
-        and analytics.
-      </p>
+      <div className="mb-12 flex flex-col items-center text-center">
+        <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+          Welcome to {appName}
+        </h1>
+        <p className="mb-6 max-w-2xl text-xl text-muted-foreground">
+          Empowering founders with insights, tools, and community to build
+          successful startups.
+        </p>
+        <div className="flex gap-4">
+          <Link
+            href="/about"
+            className="rounded-md bg-primary px-4 py-2 text-lg font-semibold text-primary-foreground hover:bg-primary/90"
+          >
+            Learn More
+          </Link>
+          <Link
+            href="/signup"
+            className="rounded-md border border-primary bg-background px-4 py-2 text-lg font-semibold text-primary hover:bg-primary/10"
+          >
+            Get Started
+          </Link>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-2">
         <h2 className="text-xl font-bold">Newsletter</h2>
         <p className="text-gray-500 dark:text-gray-400">

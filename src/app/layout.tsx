@@ -17,6 +17,7 @@ import {
 import { ThemeProvider } from "next-themes";
 import { CookieBanner } from "~/components/cookie-banner/cookieBanner";
 import { Toaster } from "~/components/ui/toaster";
+import { Footer } from "~/components/layout/footer";
 
 export const metadata: Metadata = {
   title: env.APP_NAME,
@@ -38,7 +39,8 @@ export default async function RootLayout({
       <body>
         <TRPCReactProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="flex h-screen w-full">
+            <div className="flex min-h-screen w-full">
+              {/* Sidebar */}
               <div className="hidden h-full lg:fixed lg:block lg:w-64 lg:shrink-0 lg:border-r">
                 <div className="flex h-full flex-col justify-between px-4 py-6">
                   <div className="flex h-full flex-col">
@@ -61,7 +63,9 @@ export default async function RootLayout({
                   </div>
                 </div>
               </div>
-              <div className="flex-1 lg:ml-64">
+              {/* Main content area */}
+              <div className="flex flex-1 flex-col lg:ml-64">
+                {/* Mobile header */}
                 <header className="sticky top-0 z-10 border-b bg-background/80 px-4 py-3 backdrop-blur-sm lg:hidden">
                   <div className="flex items-center justify-between">
                     <Link
@@ -74,7 +78,11 @@ export default async function RootLayout({
                     <SidebarMobile user={session?.user} />
                   </div>
                 </header>
-                <main className="p-4 lg:p-8">{children}</main>
+                {/* Main content and footer wrapper */}
+                <div className="flex flex-grow flex-col">
+                  <main className="flex-grow p-4 lg:p-8">{children}</main>
+                  <Footer />
+                </div>
               </div>
             </div>
             <CookieBanner />
