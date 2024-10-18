@@ -46,7 +46,7 @@ export default async function ProfilePage({
       {user.website ? (
         <Button
           variant="default"
-          className="bg-muted text-muted-foreground"
+          className="w-96 overflow-hidden bg-muted text-muted-foreground hover:bg-primary hover:text-primary-foreground"
           asChild
         >
           <Link
@@ -59,15 +59,93 @@ export default async function ProfilePage({
           </Link>
         </Button>
       ) : null}
-      {user.twitter ? <p>Twitter: {user?.twitter}</p> : null}
-      {user.instagram ? <p>Instagram: {user?.instagram}</p> : null}
-      {user.facebook ? <p>Facebook: {user?.facebook}</p> : null}
-      {user.linkedin ? <p>LinkedIn: {user?.linkedin}</p> : null}
-      {user.youtube ? <p>YouTube: {user?.youtube}</p> : null}
-      {user.tiktok ? <p>TikTok: {user?.tiktok}</p> : null}
-      {user.github ? <p>GitHub: {user?.github}</p> : null}
-      {user.discord ? <p>Discord: {user?.discord}</p> : null}
-      {user.twitch ? <p>Twitch: {user?.twitch}</p> : null}
+      {user.twitter ||
+      user.instagram ||
+      user.facebook ||
+      user.linkedin ||
+      user.youtube ||
+      user.tiktok ||
+      user.github ||
+      user.discord ||
+      user.twitch ? (
+        <>
+          <h2 className="text-xl font-bold">Socials</h2>
+          <div className="flex flex-wrap gap-2">
+            {user.twitter ? (
+              <Button
+                variant="default"
+                className="w-40 bg-blue-400 text-white hover:bg-blue-500 hover:text-white"
+              >
+                Twitter
+              </Button>
+            ) : null}
+            {user.instagram ? (
+              <Button
+                variant="default"
+                className="w-40 bg-pink-400 text-white hover:bg-pink-500 hover:text-white"
+              >
+                Instagram
+              </Button>
+            ) : null}
+            {user.facebook ? (
+              <Button
+                variant="default"
+                className="w-40 bg-blue-600 text-white hover:bg-blue-700 hover:text-white"
+              >
+                Facebook
+              </Button>
+            ) : null}
+            {user.linkedin ? (
+              <Button
+                variant="default"
+                className="w-40 bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
+              >
+                LinkedIn
+              </Button>
+            ) : null}
+            {user.youtube ? (
+              <Button
+                variant="default"
+                className="w-40 bg-red-500 text-white hover:bg-red-600 hover:text-white"
+              >
+                YouTube
+              </Button>
+            ) : null}
+            {user.tiktok ? (
+              <Button
+                variant="default"
+                className="w-40 bg-purple-500 text-white hover:bg-purple-600 hover:text-white"
+              >
+                TikTok
+              </Button>
+            ) : null}
+            {user.github ? (
+              <Button
+                variant="default"
+                className="w-40 bg-gray-500 text-white hover:bg-gray-600 hover:text-white"
+              >
+                GitHub
+              </Button>
+            ) : null}
+            {user.discord ? (
+              <Button
+                variant="default"
+                className="w-40 bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
+              >
+                Discord
+              </Button>
+            ) : null}
+            {user.twitch ? (
+              <Button
+                variant="default"
+                className="w-40 bg-purple-700 text-white hover:bg-purple-800 hover:text-white"
+              >
+                Twitch
+              </Button>
+            ) : null}
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }
