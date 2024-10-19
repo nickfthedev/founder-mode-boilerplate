@@ -20,6 +20,8 @@ ENV NODE_ENV=production
 
 # Build the application (if needed)
 RUN yarn build
+# Run database migrations
+RUN yarn db:migrate
 
 # Expose the port the app runs on
 EXPOSE 3000
