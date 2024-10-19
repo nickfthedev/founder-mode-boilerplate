@@ -47,17 +47,16 @@ export async function POST(req: NextRequest) {
       const priceLookupKey = metadata.priceLookupKey;
       let credits = 0;
       let trainingCredits = 0;
-      // Products 
+      // Here you can add premium flag to the user account, give credits, send an email, or perform other actions
+      // Examples:
+      // - Set premium status: user.isPremium = true
+      // - Add credits: user.credits += purchasedCredits
+      // - Send welcome email: await sendWelcomeEmail(user.email)
+      // - Trigger any other necessary actions or notifications
       switch (priceLookupKey) {
-        case "bundle":
-          trainingCredits = 1;
-          credits = 30;
-          break;
-        case "training":
-          trainingCredits = 1;
-          break;
-        case "photo":
-          credits = 50;
+        case "boilerplate":
+          // trainingCredits = 1;
+          // credits = 30;
           break;
       }
       // Update user
@@ -75,6 +74,7 @@ export async function POST(req: NextRequest) {
           // },
         },
       });
+      // Send a message to your private discord channel to notify you about the new purchase
       await sendMessageToDiscord({
         webhookUrl: env.DISCORD_WEBHOOK_STRIPE,
         content: `Checkout session completed.\n 
@@ -86,6 +86,7 @@ export async function POST(req: NextRequest) {
         Training Credits: ${trainingCredits}`,
       });
       break;
+    // Add more cases for other event types as needed
     default:
       console.log("Unhandled event type:", event.type);
       break;
