@@ -1,8 +1,48 @@
-# Create T3 App
+# Founder-Mode Boilerplate
+
+Check out https://founder-mo.de
+You can support me by buying the app there. 💚
+If you want to contribute, feel free to do so!
+
+## Features
+
+- Authentication
+- Database
+- Email
+- Payment
+- Contact Form
+- Newsletter
+- Blog
+- Cookie Banner
+- Pages
+- Sidebar-Layout
+- Dark-/Lightmode
+- Users with Profiles
+- Allow Users to Post Blogposts
+- Configurable via app.config.ts
+
+## How to use
+
+- Clone the repo
+- Add your own env variables
+- Run `yarn` to install the dependencies
+- Run `docker compose up -d postgres` to start the database
+- Run `yarn db:migrate` to migrate the database
+- Run `yarn dev` to start the development server
+
+# Stripe Webhooks
+
+- You can run `docker compose up stripecli` to start the stripe cli
+- Check the logs with `docker compose logs -f stripecli` (only if you run it for the first time & in detached mode)
+- Follow the login instructions from the logs
+- Re-run `docker compose up stripecli` to restart the stripe cli
+- Copy webhook secret from the logs into the .env file
+- Run `docker compose up -d stripecli` to start the stripe cli in detached mode to run it in the background
+- Test your webhook
+
+## Check out the original T3 Readme and follow the docs if you want to learn more
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
-
-## What's next? How do I make an app with this?
 
 We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
 

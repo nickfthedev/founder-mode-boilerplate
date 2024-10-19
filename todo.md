@@ -5,10 +5,10 @@
 ## Ideas what to add
 
 - [ ] Blog (with AI Generator for Posts)
-- [ ] Every user can have a blog?
+- [x] Every user can have a blog?
 - [ ] Static Pages
 - [ ] Wikipedia for Founders, Logged in users can suggest edits
-- [ ] Newsletter
+- [x] Newsletter
 - [ ] List of AI Products, Startups and Services
 - [ ] Blog AI Generator from Website
 - [ ] Icon Generator

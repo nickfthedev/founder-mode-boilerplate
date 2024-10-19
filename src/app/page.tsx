@@ -6,6 +6,7 @@ import { env } from "~/env";
 import { NewsletterSignupForm } from "~/components/newsletter/signup-form";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { CheckoutButton } from "~/components/stripe/checkoutButton";
 
 export default async function Home() {
   const session = await getServerAuthSession();
@@ -94,6 +95,10 @@ export default async function Home() {
               <Badge variant="outline">Cookie Banner</Badge>
               <Badge variant="outline">Pages</Badge>
               <Badge variant="outline">Sidebar-Layout</Badge>
+              <Badge variant="outline">Dark-/Lightmode</Badge>
+              <Badge variant="outline">Users with Profiles</Badge>
+              <Badge variant="outline">Allow Users to Post Blogposts</Badge>
+              <Badge variant="outline">Configurable via app.config.ts</Badge>
             </div>
           </div>
 
@@ -104,7 +109,9 @@ export default async function Home() {
               As mentioned, you can pay for it, or use it for free. Your choice.
             </p>
             <div className="flex flex-row gap-2">
-              <Button className="w-fit">Buy the Boilerplate</Button>
+              <CheckoutButton priceLookupKey="boilerplate">
+                Buy the Boilerplate
+              </CheckoutButton>
               <Button variant="outline" className="w-fit">
                 Use it for free
               </Button>

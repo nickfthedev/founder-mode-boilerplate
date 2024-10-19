@@ -7,8 +7,12 @@ import { useToast } from "~/hooks/use-toast";
 
 export const CheckoutButton = ({
   priceLookupKey,
+  children,
+  className,
 }: {
   priceLookupKey: string;
+  children: React.ReactNode;
+  className?: string;
 }) => {
   const router = useRouter();
   const { toast } = useToast();
@@ -32,8 +36,9 @@ export const CheckoutButton = ({
       onClick={() => {
         mutate({ priceLookupKey });
       }}
+      className={className}
     >
-      {isPending ? "Loading..." : "Buy"}
+      {isPending ? "Loading..." : children}
     </Button>
   );
 };
