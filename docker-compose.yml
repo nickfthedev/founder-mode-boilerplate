@@ -27,6 +27,7 @@ services:
     # This configuration allows the Stripe CLI to forward webhooks to the host machine
     # on both WSL and native Linux systems. For native Linux (e.g., Ubuntu), set the
     # DOCKER_HOST_IP environment variable in your .env file to your host's IP (usually 172.17.0.1).
+    # If this doesn't work, you can find the correct IP by running `ip addr show docker0 | grep inet`
     # The extra_hosts setting ensures host.docker.internal resolves correctly on Linux.
     command: listen --forward-to ${DOCKER_HOST_IP:-host.docker.internal}:3000/api/webhooks/stripe
     network_mode: "host"
