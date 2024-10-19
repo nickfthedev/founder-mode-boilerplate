@@ -9,6 +9,7 @@ import { Button } from "~/components/ui/button";
 import { CheckoutButton } from "~/components/stripe/checkoutButton";
 
 export default async function Home() {
+  // Check if the user is authenticated
   const session = await getServerAuthSession();
 
   const appUrl = env.APP_URL;
