@@ -18,6 +18,7 @@ import {
   MenuIcon,
   FileIcon,
   UserCircle,
+  MessageCircleIcon,
 } from "lucide-react";
 import { canPostBlogPosts } from "~/types/blog.types";
 import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
@@ -35,6 +36,7 @@ export type Navigation = {
 const navigation: Navigation[] = [
   { href: "/", label: "Home", icon: HomeIcon },
   { href: "/blog", label: "Blog", icon: NewspaperIcon },
+  { href: "/contact", label: "Contact", icon: MessageCircleIcon },
 ];
 
 /**

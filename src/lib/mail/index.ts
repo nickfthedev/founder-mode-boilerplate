@@ -51,10 +51,10 @@ export function sendMailWithAdapter(adapter: MailAdapter, options: MailOptions) 
 
 // Send a mail with the adapter defined in the env
 export function sendMail(options: MailOptions) {
-  if (APP_CONFIG.emailProvider.includes('CONSOLE')) {
+  if (env.MAIL_PROVIDER.includes('CONSOLE')) {
     return sendMailWithAdapter(consoleAdapter, options)
   }
-  if (APP_CONFIG.emailProvider.includes('RESEND')) {
+  if (env.MAIL_PROVIDER.includes('RESEND')) {
     return sendMailWithAdapter(resendAdapter, options)
   }
 }

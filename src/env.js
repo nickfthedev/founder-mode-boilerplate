@@ -26,9 +26,20 @@ export const env = createEnv({
     ),
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
-    RESEND_API_KEY: z.string().optional(),
+    // reCAPTCHA
+    RECAPTCHA_SECRET_KEY: z.string(),
+    // Contact Settings
+    CONTACT_DISCORD_WEBHOOK_URL: z.string().optional(),
+    // Mail Provider
+    MAIL_PROVIDER: z.string(),
+    // Resend
+    RESEND_API_KEY: process.env.MAIL_PROVIDER?.includes("RESEND")
+      ? z.string()
+      : z.string().optional(),
+    // Stripe
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
+    // Webhook to send buy events to discord
     DISCORD_WEBHOOK_STRIPE: z.string(),
   },
 
@@ -54,6 +65,11 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+    RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
+    // Contact Settings
+    CONTACT_DISCORD_WEBHOOK_URL: process.env.CONTACT_DISCORD_WEBHOOK_URL,
+    // Mail Provider
+    MAIL_PROVIDER: process.env.MAIL_PROVIDER,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
