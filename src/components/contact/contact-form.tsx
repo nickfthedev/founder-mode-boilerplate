@@ -83,8 +83,8 @@ export default function ContactForm() {
       <Card className="my-8 w-full max-w-3xl">
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader>
-            <CardTitle>Kontakt</CardTitle>
-            <CardDescription>Wir freuen uns von dir zu hören</CardDescription>
+            <CardTitle>Contact</CardTitle>
+            <CardDescription>We are happy to hear from you</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid w-full items-center gap-4">
@@ -93,7 +93,7 @@ export default function ContactForm() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Deine Email"
+                  placeholder="Your email"
                   {...form.register("email")}
                 />
                 {form.formState.errors.email?.message && (
@@ -107,7 +107,7 @@ export default function ContactForm() {
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Dein Name"
+                  placeholder="Your name"
                   {...form.register("name")}
                 />
                 {form.formState.errors.name?.message && (
@@ -122,7 +122,7 @@ export default function ContactForm() {
                 <Input
                   id="subject"
                   type="text"
-                  placeholder="Betreff"
+                  placeholder="Subject"
                   {...form.register("subject")}
                 />
                 {form.formState.errors.subject?.message && (
@@ -135,7 +135,7 @@ export default function ContactForm() {
                 <Label htmlFor="message">Nachricht</Label>
                 <Textarea
                   id="message"
-                  placeholder="Deine Nachricht"
+                  placeholder="Your message"
                   {...form.register("message")}
                 />
                 {form.formState.errors.message?.message && (
@@ -148,7 +148,7 @@ export default function ContactForm() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-2">
             <Button type="submit" className="w-full">
-              Senden
+              Send
             </Button>
           </CardFooter>
         </form>
