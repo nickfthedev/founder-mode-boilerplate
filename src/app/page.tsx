@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { getServerAuthSession } from "~/server/auth";
-import { api, HydrateClient } from "~/trpc/server";
+import { HydrateClient } from "~/trpc/server";
 import { env } from "~/env";
 import { NewsletterSignupForm } from "~/components/newsletter/signup-form";
 import { Badge } from "~/components/ui/badge";
@@ -81,7 +81,7 @@ export default async function Home() {
 
           {/* What's included? */}
           <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-bold">What's included?</h2>
+            <h2 className="text-xl font-bold">What&apos;s included?</h2>
             <p className="text-gray-500 dark:text-gray-400">
               A list of features that come with this boilerplate.
             </p>
@@ -108,13 +108,23 @@ export default async function Home() {
             <h2 className="text-xl font-bold">Interested?</h2>
             <p className="text-gray-500 dark:text-gray-400">
               As mentioned, you can pay for it, or use it for free. Your choice.
+              <br />
+              <span className="text-sm text-muted-foreground/50">
+                Pro Tip: Sign up for the newsletter to get the latest news and
+                updates.
+              </span>
             </p>
+
             <div className="flex flex-row gap-2">
               <CheckoutButton priceLookupKey="boilerplate">
                 Buy the Boilerplate
               </CheckoutButton>
-              <Button variant="outline" className="w-fit">
-                Use it for free
+              <Button variant="outline" className="w-fit" asChild>
+                <Link
+                  href={`https://github.com/nickfthedev/founder-mode-boilerplate`}
+                >
+                  Use it for free
+                </Link>
               </Button>
             </div>
           </div>

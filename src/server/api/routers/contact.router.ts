@@ -7,13 +7,21 @@ import { TRPCError } from "@trpc/server";
 import { env } from "~/env";
 import { APP_CONFIG } from "~/config/app.config";
 
-// Add this function to verify the reCAPTCHA token
-async function verifyRecaptcha(token: string) {
+// Add this interface to type the reCAPTCHA response
+interface RecaptchaResponse {
+  success: boolean;
+  challenge_ts: string;
+  hostname: string;
+  "error-codes"?: string[];
+}
+
+// Update this function to use the RecaptchaResponse type
+async function verifyRecaptcha(token: string): Promise<boolean> {
   const secretKey = env.RECAPTCHA_SECRET_KEY;
   const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
 
   const response = await fetch(verifyUrl, { method: "POST" });
-  const data = await response.json();
+  const data = await response.json() as RecaptchaResponse;
 
   return data.success;
 }

@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { env } from "~/env";
 
 import { sendMessageToDiscord } from "~/lib/discord-bot/discord-bot";
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
   switch (event.type) {
     case "checkout.session.completed":
-      const session = event.data.object as Stripe.Checkout.Session;
+      const session = event.data.object;
       console.log(session);
       if (session.payment_status !== "paid") {
         return new Response("Payment status is not paid", { status: 400 });
@@ -45,8 +45,8 @@ export async function POST(req: NextRequest) {
         return new Response("User not found", { status: 404 });
       }
       const priceLookupKey = metadata.priceLookupKey;
-      let credits = 0;
-      let trainingCredits = 0;
+      // let credits = 0;
+      // let trainingCredits = 0;
       // Here you can add premium flag to the user account, give credits, send an email, or perform other actions
       // Examples:
       // - Set premium status: user.isPremium = true
@@ -82,8 +82,7 @@ export async function POST(req: NextRequest) {
         Product: ${priceLookupKey}\n
         Email: ${user.email}\n
         Name: ${user.name}\n
-        Credits: ${credits}\n
-        Training Credits: ${trainingCredits}`,
+        `,
       });
       break;
     // Add more cases for other event types as needed

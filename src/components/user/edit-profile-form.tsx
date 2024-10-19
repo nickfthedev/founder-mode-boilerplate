@@ -1,13 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateProfileSchema } from "~/types/user.types";
 import { useToast } from "~/hooks/use-toast";
 import { Input } from "../ui/input";
-import { useEffect, useState } from "react";
-import { Label } from "../ui/label";
+import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { Switch } from "../ui/switch";
 import { api } from "~/trpc/react";
@@ -20,23 +19,6 @@ import {
   FormDescription,
   FormMessage,
 } from "../ui/form";
-
-// Function that calls the api to upload the file to the server
-async function uploadFile(file: File): Promise<string> {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const response = await fetch("/api/upload-avatar", {
-    method: "POST",
-    body: formData,
-  });
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error);
-  }
-  const data = await response.json();
-  return data.fileUrl;
-}
 
 interface EditProfileFormProps {
   email?: string | null | undefined;
@@ -88,8 +70,6 @@ export default function EditProfileForm({
     },
   });
 
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-
   const { isPending, mutate, data } = api.user.updateProfile.useMutation({
     onSuccess: (data) => {
       toast({
@@ -106,20 +86,7 @@ export default function EditProfileForm({
   });
 
   async function onSubmit(values: z.infer<typeof UpdateProfileSchema>) {
-    // let avatarUrl = values.avatar;
-    // if (avatarFile) {
-    //   try {
-    //     avatarUrl = await uploadFile(avatarFile);
-    //   } catch (error) {
-    //     console.error("Error uploading file:", error);
-    //     toast({
-    //       title: "Error",
-    //       description: `Error uploading file. ${error}`,
-    //     });
-    //   }
-    // }
-
-    mutate({ ...values /*, avatar: avatarUrl */ });
+    mutate(values);
   }
 
   useEffect(() => {

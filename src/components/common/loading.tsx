@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "~/src/lib/utils";
+import { cn } from "~/lib/utils";
 
 type LoaderSize = "small" | "medium" | "large";
 
@@ -42,7 +42,7 @@ export function JumpingDotsLoader({
         {[0, 1, 2, 3].map((index) => (
           <div
             key={index}
-            className={cn(sizeClasses[size], "bg-primary rounded-full my-4")}
+            className={cn(sizeClasses[size], "my-4 rounded-full bg-primary")}
             style={dotStyle(index * 75)}
           ></div>
         ))}
@@ -80,14 +80,14 @@ export function LoadingSpinner({
       <div className={cn("relative", sizeClasses[size])}>
         <div
           className={cn(
-            "absolute top-0 left-0 right-0 bottom-0 border-gray-200 rounded-full",
-            borderSizeClasses[size]
+            "absolute bottom-0 left-0 right-0 top-0 rounded-full border-gray-200",
+            borderSizeClasses[size],
           )}
         ></div>
         <div
           className={cn(
-            "absolute top-0 left-0 right-0 bottom-0 border-primary border-t-transparent rounded-full animate-spin",
-            borderSizeClasses[size]
+            "absolute bottom-0 left-0 right-0 top-0 animate-spin rounded-full border-primary border-t-transparent",
+            borderSizeClasses[size],
           )}
         ></div>
       </div>

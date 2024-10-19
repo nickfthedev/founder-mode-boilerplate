@@ -7,7 +7,7 @@ const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
 });
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-
+import { TRPCError } from "@trpc/server";
 
 // Jetzt testen
 
@@ -77,9 +77,19 @@ export const stripeRouter = createTRPCRouter({
             checkoutSessionUrl: checkoutSession.url,
           };
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error(error);
-        throw new Error("Failed to create checkout session");
+        if (error instanceof Stripe.errors.StripeError) {
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: `Stripe error: ${error.message}`,
+            cause: error,
+          });
+        }
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create checkout session',
+        });
       }
     }),
   createPortalSession: protectedProcedure.mutation(async ({ ctx }) => {

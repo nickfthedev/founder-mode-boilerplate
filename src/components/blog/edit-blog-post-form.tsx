@@ -84,8 +84,8 @@ export default function EditBlogPostForm({
       toast({
         title: "Blog post updated successfully",
       });
-      utils.blog.getBlogPostBySlug.invalidate(post.slug);
-      utils.blog.getBlogPosts.invalidate();
+      void utils.blog.getBlogPostBySlug.invalidate(post.slug);
+      void utils.blog.getBlogPosts.invalidate();
     },
     onError: (error) => {
       console.error(error);

@@ -1,6 +1,6 @@
 "use client";
 
-import { z } from "zod";
+import type { z } from "zod";
 import { ContactSchema } from "~/types/contact.types";
 import { useForm } from "react-hook-form";
 import { Textarea } from "~/components/ui/textarea";
@@ -27,7 +27,7 @@ import { Button } from "~/components/ui/button";
 export function ReCaptchaProvider({ children }: { children: React.ReactNode }) {
   return (
     <GoogleReCaptchaProvider
-      reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}
+      reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
     >
       {children}
     </GoogleReCaptchaProvider>

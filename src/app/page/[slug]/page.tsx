@@ -1,4 +1,4 @@
-import { Metadata, ResolvingMetadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { TogglePublishedButton } from "~/components/page/toggle-published-button";
 import BackButton from "~/components/common/back-button";
@@ -21,7 +21,7 @@ export async function generateMetadata(
   const parentTitle = parentData.title?.absolute ?? "";
   const page = await api.page.getPageBySlug(slug);
 
-  if (!page || !page.published) {
+  if (!page?.published) {
     return {
       title: "Page Not Found | " + parentTitle,
     };
@@ -30,8 +30,7 @@ export async function generateMetadata(
   return {
     title: page.title + " | " + parentTitle,
     description: page.content.slice(0, 150),
-    ...(page.keywords &&
-      page.keywords.length > 0 && { keywords: page.keywords }),
+    ...(page.keywords?.length && { keywords: page.keywords }),
     openGraph: {
       title: page.title + " | " + parentTitle,
       description: page.content.slice(0, 150),

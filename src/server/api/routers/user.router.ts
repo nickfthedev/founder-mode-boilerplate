@@ -3,6 +3,8 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { sendMail } from "~/lib/mail";
 import { env } from "~/env";
+import { TRPCError } from "@trpc/server";
+import { Prisma } from "@prisma/client";
 
 const userRouter = createTRPCRouter({
   /*
@@ -24,7 +26,7 @@ const userRouter = createTRPCRouter({
           acceptedMarketing: acceptedMarketing,
         }
       })
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error updating newsletter", error)
     }
     // Update User
@@ -51,24 +53,30 @@ const userRouter = createTRPCRouter({
           twitch: input.twitch !== "" ? input.twitch : null,
         }
       })
-    } catch (error: any) {
-      if (error?.message.includes("duplicate key value")) {
-        if (error?.message.includes("user_email_unique")) {
-          return {
-            error: "Email already exists. Please sign in.",
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          const target = error.meta?.target as string[] | undefined;
+          if (target?.includes('email')) {
+            throw new TRPCError({
+              code: 'CONFLICT',
+              message: "Email already exists. Please sign in.",
+            });
           }
-        }
-        if (error?.message.includes("user_username_unique")) {
-          return {
-            error: "Username already exists. Please choose another one.",
+          if (target?.includes('username')) {
+            throw new TRPCError({
+              code: 'CONFLICT',
+              message: "Username already exists. Please choose another one.",
+            });
           }
         }
       }
-
-      return {
-        error: error?.message,
-      }
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: "An unexpected error occurred.",
+      });
     }
+    return { success: true };
   }),
   /*
    * Sign out from newsletter
@@ -129,3 +137,4 @@ const userRouter = createTRPCRouter({
 })
 
 export { userRouter }
+

@@ -8,20 +8,27 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+interface CodeProps {
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+}
+
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <Markdown
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeRaw]}
       components={{
-        code({ node, inline, className, children, ...props }: any) {
-          const match = /language-(\w+)/.exec(className || "");
+        code({ inline, className, children, ...props }: CodeProps) {
+          const match = /language-(\w+)/.exec(className ?? "");
+          const lang = match ? match[1] : "";
 
           return !inline && match ? (
             <SyntaxHighlighter
               style={dracula}
               PreTag="div"
-              language={match[1]}
+              language={lang}
               {...props}
             >
               {String(children).replace(/\n$/, "")}
