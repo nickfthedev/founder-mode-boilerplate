@@ -1,7 +1,7 @@
 # Founder-Mode Boilerplate
 
 Check out https://founder-mo.de
-You can support me by buying the app there. 💚
+You can support me by buying the boilerplate there. 💚
 If you want to contribute, feel free to do so!
 
 ## Features
