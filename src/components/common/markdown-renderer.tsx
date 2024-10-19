@@ -26,6 +26,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
           return !inline && match ? (
             <SyntaxHighlighter
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               style={dracula}
               PreTag="div"
               language={lang}
