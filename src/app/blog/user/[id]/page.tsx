@@ -27,7 +27,9 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
             <h1 className="text-2xl font-bold">
               {posts.length > 0 ? (
                 <Link href={`/user/${posts[0]?.createdBy.username}`}>
-                  `${posts[0]?.createdBy.name}s Blogposts`
+                  {posts[0]?.createdBy.name
+                    ? `${posts[0]?.createdBy.name}s Blogposts`
+                    : `${posts[0]?.createdBy.username}s Blogposts`}
                 </Link>
               ) : (
                 "No blogposts found"
