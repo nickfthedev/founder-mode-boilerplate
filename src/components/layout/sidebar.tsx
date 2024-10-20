@@ -70,6 +70,8 @@ export function SidebarMobile({
     name?: string | null;
     userRole: UserRole;
     bannedFromPosting: boolean;
+    username?: string | null | undefined;
+    public: boolean;
   };
 }) {
   const [open, setOpen] = useState(false);
@@ -122,6 +124,8 @@ export function SidebarUserMenu({
     name?: string | null;
     userRole: UserRole;
     bannedFromPosting: boolean;
+    public: boolean;
+    username?: string | null | undefined;
   };
   setOpen?: (open: boolean) => void;
 }) {

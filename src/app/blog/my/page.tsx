@@ -7,7 +7,6 @@ import { BlogPostList } from "~/components/blog/blog-post-list";
 
 export default async function BlogPage() {
   const session = await getServerAuthSession();
-
   const ownPosts = await api.blog.getUserSelfBlogPosts();
 
   return (

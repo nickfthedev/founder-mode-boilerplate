@@ -38,7 +38,7 @@ export function canEditBlogPost({ user, post }: { user?: { id: string, userRole:
   return false;
 }
 
-export function canPostBlogPosts({ user }: { user?: { userRole: UserRole, bannedFromPosting: boolean, public: boolean, username: string } }) {
+export function canPostBlogPosts({ user }: { user?: { userRole: UserRole, bannedFromPosting: boolean, public: boolean, username?: string | null | undefined } }) {
 
   if (!user) {
     return false;
