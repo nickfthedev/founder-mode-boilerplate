@@ -38,11 +38,17 @@ export function canEditBlogPost({ user, post }: { user?: { id: string, userRole:
   return false;
 }
 
-export function canPostBlogPosts({ user }: { user?: { userRole: UserRole, bannedFromPosting: boolean } }) {
+export function canPostBlogPosts({ user }: { user?: { userRole: UserRole, bannedFromPosting: boolean, public: boolean, username: string } }) {
+
   if (!user) {
     return false;
   }
   if (user.bannedFromPosting) {
+    return false;
+  }
+  // If a user is not public, he should not be able to post blog posts
+  // If a user has no username, he should not be able to post blog posts since he has no profile
+  if (!user.public || !user.username) {
     return false;
   }
   return APP_CONFIG.canPostBlogPosts.includes(user.userRole);
