@@ -1,6 +1,7 @@
 import { Globe2Icon } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { BlogPostList } from "~/components/blog/blog-post-list";
 import { Button } from "~/components/ui/button";
 import { db } from "~/server/db";
 import { canAccessUserProfile } from "~/types/user.types";
@@ -13,6 +14,11 @@ export default async function ProfilePage({
   const user = await db.user.findUnique({
     where: {
       username: params.username,
+    },
+  });
+  const blogposts = await db.blogPost.findMany({
+    where: {
+      createdById: user?.id,
     },
   });
 
@@ -146,6 +152,13 @@ export default async function ProfilePage({
           </div>
         </>
       ) : null}
+      {blogposts.length > 0 ? (
+        <>
+          <h2 className="text-xl font-bold">Blogposts</h2>
+          <BlogPostList posts={blogposts} />
+        </>
+      ) : null}
     </div>
   );
 }
+
