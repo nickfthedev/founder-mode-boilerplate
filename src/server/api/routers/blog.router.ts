@@ -71,6 +71,14 @@ export const blogRouter = createTRPCRouter({
     });
     return blogPosts;
   }),
+  getPublishedBlogPostsByUserId: publicProcedure.input(z.object({ userId: z.string(), limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
+    const blogPosts = await ctx.db.blogPost.findMany({
+      where: { createdById: input?.userId, published: true },
+      orderBy: { createdAt: "desc" },
+      take: input?.limit,
+    });
+    return blogPosts;
+  }),
   /** 
    * Function to get a blog post by slug
    */

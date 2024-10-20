@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { BlogPostList } from "~/components/blog/blog-post-list";
 import { Button } from "~/components/ui/button";
 import { db } from "~/server/db";
+import { api } from "~/trpc/server";
 import { canAccessUserProfile } from "~/types/user.types";
 
 export default async function ProfilePage({
@@ -16,10 +17,12 @@ export default async function ProfilePage({
       username: params.username,
     },
   });
-  const blogposts = await db.blogPost.findMany({
-    where: {
-      createdById: user?.id,
-    },
+  if (!user) {
+    return "not found";
+  }
+
+  const blogposts = await api.blog.getPublishedBlogPostsByUserId({
+    userId: user?.id,
   });
 
   if (!user) {
@@ -161,4 +164,3 @@ export default async function ProfilePage({
     </div>
   );
 }
-
