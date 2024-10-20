@@ -25,9 +25,13 @@ export default async function BlogPage({ params }: { params: { id: string } }) {
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-2">
             <h1 className="text-2xl font-bold">
-              {posts.length > 0
-                ? `${posts[0]?.createdBy.name}s Blogposts`
-                : "No blogposts found"}
+              {posts.length > 0 ? (
+                <Link href={`/user/${posts[0]?.createdBy.username}`}>
+                  `${posts[0]?.createdBy.name}s Blogposts`
+                </Link>
+              ) : (
+                "No blogposts found"
+              )}
             </h1>
             <BlogPostList posts={posts} />
           </div>
