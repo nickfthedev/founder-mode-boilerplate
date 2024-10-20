@@ -109,6 +109,7 @@ model User {
     sessions      Session[]
     posts         BlogPost[]
     pages         Page[]
+    projects      Project[]
 }
 
 model Newsletter {
@@ -125,4 +126,19 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+// Users can claim projects to add them to their portfolio
+model Project {
+    id          Int      @id @default(autoincrement())
+    slug        String   @unique
+    name        String
+    url         String
+    description String?
+    logo        String?
+    keywords    String[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    claimedBy   User?    @relation(fields: [claimedById], references: [id])
+    claimedById String?
 }
