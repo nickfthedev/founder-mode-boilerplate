@@ -34,7 +34,7 @@ export function CookieBanner() {
       // if (umamiWebsiteKey) {
       //   // Add Umami
       //   const umamiScript = document.createElement("script");
-      //   umamiScript.src = "https://u.nick-friedrich.de/script.js";
+      //   umamiScript.src = process.env.NEXT_PUBLIC_UMAMI_URL;
       //   umamiScript.defer = true;
       //   umamiScript.setAttribute("data-website-id", umamiWebsiteKey);
       //   document.body.appendChild(umamiScript);
