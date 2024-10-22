@@ -21,10 +21,19 @@ import { useToast } from "~/hooks/use-toast";
 import { useEffect, useState } from "react";
 import BackButton from "../common/back-button";
 import { UserRole } from "~/types/user.types";
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/i18n/routing";
+import { useTranslations } from "next-intl";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export default function NewPageForm({ userRole }: { userRole: UserRole }) {
   const router = useRouter();
+  const t = useTranslations("Page");
   const utils = api.useUtils();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof NewPageSchema>>({
@@ -32,6 +41,7 @@ export default function NewPageForm({ userRole }: { userRole: UserRole }) {
     defaultValues: {
       title: "",
       content: "",
+      language: "en",
     },
   });
 
@@ -121,6 +131,31 @@ export default function NewPageForm({ userRole }: { userRole: UserRole }) {
                 <FormDescription>
                   The keywords of the page as a comma separated list.
                 </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="language"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("language")}</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("language")} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="en">{t("english")}</SelectItem>
+                    <SelectItem value="de">{t("german")}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>{t("language_description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

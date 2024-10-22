@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { Link } from "~/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
 interface Page {
   title: string;
@@ -10,11 +11,20 @@ interface Page {
   createdAt: Date;
   updatedAt: Date;
   createdById: string;
+  language: string;
 }
 
-export function PageList({ pages }: { pages: Page[] }) {
+export async function PageList({
+  pages,
+  showLanguage = false,
+}: {
+  pages: Page[];
+  showLanguage?: boolean;
+}) {
+  const t = await getTranslations("Page");
+
   if (pages.length === 0) {
-    return <div className="text-muted-foreground">No pages yet</div>;
+    return <div className="text-muted-foreground">{t("no_pages_yet")}</div>;
   }
 
   return (
@@ -25,18 +35,23 @@ export function PageList({ pages }: { pages: Page[] }) {
             <Link href={`/page/${page.slug}`}>{page.title}</Link>
             {page.published ? null : (
               <span className="rounded-xl bg-secondary p-1 text-xs text-muted-foreground">
-                (Draft)
+                ({t("draft")})
+              </span>
+            )}
+            {showLanguage && (
+              <span className="rounded-xl bg-secondary p-1 text-xs text-muted-foreground">
+                {page.language}
               </span>
             )}
           </h2>
           <span className="text-sm text-muted-foreground">
-            Created: {page.createdAt.toLocaleDateString()} / Updated:{" "}
-            {page.updatedAt.toLocaleDateString()}
+            {t("created")}: {page.createdAt.toLocaleDateString()} /{" "}
+            {t("updated")}: {page.updatedAt.toLocaleDateString()}
           </span>
           <div>
             <span className="text-sm text-muted-foreground">
               {page.content.replace(/[#_*~`>]/g, "").slice(0, 100)}...
-              <Link href={`/blog/post/${page.slug}`}>Read more</Link>
+              <Link href={`/page/${page.slug}`}>{t("read_more")}</Link>
             </span>
           </div>
         </div>

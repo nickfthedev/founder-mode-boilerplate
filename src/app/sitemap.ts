@@ -1,3 +1,4 @@
+// TODO: Re write it look next-intl examples:w
 import type { MetadataRoute } from 'next'
 import { env } from '../env'
 import { api } from '../trpc/server'

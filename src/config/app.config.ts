@@ -17,7 +17,7 @@ export interface AppConfigInterface {
 
 export const APP_CONFIG: AppConfigInterface = {
   // Defines who can create, edit and delete blog posts
-  canPostBlogPosts: ["ADMIN", "USER"],
+  canPostBlogPosts: ["ADMIN"],
   // Defines who can create, edit and delete blog posts as page owner
   canPostBlogPostAsPageOwner: ["ADMIN"],
   // Defines who can create, edit and delete pages
@@ -25,9 +25,9 @@ export const APP_CONFIG: AppConfigInterface = {
   canCreatePages: ["ADMIN"],
   // Email Settings
   fromName: "NoReply",
-  fromEmail: "noreply@example.com",
+  fromEmail: "noreply@storyli.de",
   // Contact Settings
-  contactEmail: "contact@example.com",
+  contactEmail: "contact@storyli.de",
   contactEnableDiscord: true,
   contactEnableEmail: true,
 };

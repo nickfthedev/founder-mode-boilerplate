@@ -1,20 +1,15 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "~/components/ui/button";
+import BaseLayout from "~/components/layout/base-layout";
+import NotFoundPage from "~/components/layout/not-found-page";
+import { routing } from "~/i18n/routing";
 
-export default function NotFound() {
+// This page renders when a route like `/unknown.txt` is requested.
+// In this case, the layout at `app/[locale]/layout.tsx` receives
+// an invalid value as the `[locale]` param and calls `notFound()`.
+
+export default function GlobalNotFound() {
   return (
-    <div className="flex min-h-[calc(100vh-7rem)] items-center justify-center">
-      <div className="flex flex-col items-center space-y-4 text-center">
-        <Image src="/404_cat.png" alt="404" width={256} height={256} />
-        <h2 className="mb-4 text-2xl font-bold">404 - Page not found</h2>
-        <p className="mb-4">The page you are looking for does not exist.</p>
-        <Button asChild>
-          <Link href="/" className=" ">
-            Back to home
-          </Link>
-        </Button>
-      </div>
-    </div>
+    <BaseLayout locale={routing.defaultLocale}>
+      <NotFoundPage />
+    </BaseLayout>
   );
 }

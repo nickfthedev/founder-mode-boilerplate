@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/i18n/routing";
 import { Button } from "../ui/button";
 import { api } from "~/trpc/react";
 import { useToast } from "~/hooks/use-toast";

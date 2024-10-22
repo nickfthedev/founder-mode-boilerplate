@@ -37,7 +37,7 @@ export const pageRouter = createTRPCRouter({
    * Function to create a new page
    */
   createPage: protectedProcedure.input(NewPageSchema).mutation(async ({ input, ctx }) => {
-    const { title, content, keywords } = input;
+    const { title, content, keywords, language } = input;
     if (!canCreatePages({ user: ctx.session.user })) {
       throw new Error("You are not allowed to create pages");
     }
@@ -49,6 +49,7 @@ export const pageRouter = createTRPCRouter({
         content,
         slug,
         keywords,
+        language,
         createdById: ctx.session.user.id,
       },
     });
@@ -58,9 +59,9 @@ export const pageRouter = createTRPCRouter({
    * Function to update a page
    */
   updatePage: protectedProcedure.input(UpdatePageSchema).mutation(async ({ input, ctx }) => {
-    const { title, content, slug, published, keywords } = input;
+    const { id, title, content, slug, published, keywords, language } = input;
     const page = await ctx.db.page.findUnique({
-      where: { slug },
+      where: { id },
     });
     if (!page) {
       throw new Error("Page not found");
@@ -69,8 +70,8 @@ export const pageRouter = createTRPCRouter({
       throw new Error("You are not allowed to edit this page");
     }
     const updatedPage = await ctx.db.page.update({
-      where: { slug },
-      data: { title, content, published, keywords },
+      where: { id: page.id },
+      data: { title, content, published, keywords, language, slug },
     });
     return updatedPage;
   }),
@@ -89,7 +90,7 @@ export const pageRouter = createTRPCRouter({
       throw new Error("You are not allowed to toggle the published status of this page");
     }
     const updatedPage = await ctx.db.page.update({
-      where: { slug: input },
+      where: { id: page.id },
       data: { published: !page.published },
     });
     return updatedPage;

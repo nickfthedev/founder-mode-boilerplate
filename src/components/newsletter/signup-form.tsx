@@ -15,6 +15,7 @@ import { Input } from "~/components/ui/input";
 import { api } from "~/trpc/react";
 import { useToast } from "~/hooks/use-toast";
 import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
 const NewsletterSignupSchema = z.object({
   email: z.string().email(),
@@ -22,6 +23,7 @@ const NewsletterSignupSchema = z.object({
 
 export function NewsletterSignupForm() {
   const toast = useToast();
+  const t = useTranslations("Newsletter");
   const form = useForm<z.infer<typeof NewsletterSignupSchema>>({
     resolver: zodResolver(NewsletterSignupSchema),
     defaultValues: {
@@ -32,9 +34,8 @@ export function NewsletterSignupForm() {
   const { mutate, isPending } = api.user.signUpForNewsletter.useMutation({
     onSuccess: () => {
       toast.toast({
-        title: "Newsletter",
-        description:
-          "You have been added to the newsletter. Please check your email for a confirmation link.",
+        title: t("title"),
+        description: t("success_message"),
       });
     },
   });
@@ -54,14 +55,14 @@ export function NewsletterSignupForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Email" {...field} />
+                <Input placeholder={t("email")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Submitting..." : "Submit"}
+          {isPending ? t("submitting") : t("submit")}
         </Button>
       </form>
     </Form>

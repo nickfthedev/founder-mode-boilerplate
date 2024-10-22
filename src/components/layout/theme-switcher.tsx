@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -14,6 +15,7 @@ import {
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme();
+  const t = useTranslations("ThemeSwitcher");
 
   return (
     <div className="flex items-center">
@@ -25,14 +27,18 @@ export function ThemeToggle() {
       >
         <Sun className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-transform duration-500 ease-in-out dark:rotate-0 dark:scale-100" />
         <Moon className="scale-1000 absolute h-[1.2rem] w-[1.2rem] rotate-0 transition-transform duration-500 ease-in-out dark:-rotate-90 dark:scale-0" />
-        <span className="sr-only">Switch Theme</span>
+        <span className="sr-only">{t("switch_theme")}</span>
       </Button>
-      <span className="text-xs text-muted-foreground/50">Switch Theme</span>
+      <span className="text-xs text-muted-foreground/50">
+        {t("switch_theme")}
+      </span>
     </div>
   );
 }
+
 export function ThemeSwitcher() {
   const { setTheme } = useTheme();
+  const t = useTranslations("ThemeSwitcher");
 
   return (
     <DropdownMenu>
@@ -40,18 +46,18 @@ export function ThemeSwitcher() {
         <Button variant="ghost" size="icon">
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">{t("toggle_theme")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          {t("light")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          {t("dark")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          {t("system")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

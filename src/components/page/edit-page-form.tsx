@@ -21,7 +21,15 @@ import { Switch } from "../ui/switch";
 import { useEffect, useState } from "react";
 import { useToast } from "~/hooks/use-toast";
 import type { UserRole } from "~/types/user.types";
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/i18n/routing";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { useTranslations } from "next-intl";
 
 type Page = {
   id: number;
@@ -32,6 +40,7 @@ type Page = {
   keywords: string[];
   updatedAt: Date;
   createdById: string;
+  language: string;
 };
 
 export default function EditPageForm({
@@ -41,6 +50,7 @@ export default function EditPageForm({
   page: Page;
   user?: { userRole: UserRole };
 }) {
+  const t = useTranslations("Page");
   const router = useRouter();
   const { toast } = useToast();
   const utils = api.useUtils();
@@ -48,16 +58,19 @@ export default function EditPageForm({
   const form = useForm<z.infer<typeof UpdatePageSchema>>({
     resolver: zodResolver(UpdatePageSchema),
     defaultValues: {
+      id: page.id,
       title: page.title,
       content: page.content,
       slug: page.slug,
       published: page.published,
+      language: page.language as "en" | "de",
     },
   });
 
   useEffect(() => {
     if (page) {
       form.reset({
+        id: page.id,
         title: page.title,
         content: page.content,
         slug: page.slug,
@@ -78,17 +91,17 @@ export default function EditPageForm({
   const { mutate, isPending } = api.page.updatePage.useMutation({
     onSuccess: async (page) => {
       toast({
-        title: "Page updated successfully",
+        title: t("page_updated_success"),
       });
       await utils.page.getPageBySlug.invalidate(page.slug);
       await utils.page.getAllPages.invalidate();
-      router.push(`/page/${page.slug}`);
+      router.refresh();
     },
     onError: (error) => {
       console.error(error);
       toast({
         variant: "destructive",
-        title: "Failed to update blog post",
+        title: t("page_update_failed"),
         description: error.message,
       });
     },
@@ -106,11 +119,11 @@ export default function EditPageForm({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>{t("title")}</FormLabel>
               <FormControl>
-                <Input placeholder="Title" {...field} />
+                <Input placeholder={t("title")} {...field} />
               </FormControl>
-              <FormDescription>The title of the page.</FormDescription>
+              <FormDescription>{t("title_description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -121,11 +134,11 @@ export default function EditPageForm({
           name="slug"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Slug</FormLabel>
+              <FormLabel>{t("slug")}</FormLabel>
               <FormControl>
-                <Input placeholder="Slug" {...field} />
+                <Input placeholder={t("slug")} {...field} />
               </FormControl>
-              <FormDescription>The slug of the page.</FormDescription>
+              <FormDescription>{t("slug_description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -135,11 +148,11 @@ export default function EditPageForm({
           name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Content</FormLabel>
+              <FormLabel>{t("content")}</FormLabel>
               <FormControl>
-                <Textarea placeholder="Content" rows={10} {...field} />
+                <Textarea placeholder={t("content")} rows={10} {...field} />
               </FormControl>
-              <FormDescription>The content of the page.</FormDescription>
+              <FormDescription>{t("content_description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -149,15 +162,15 @@ export default function EditPageForm({
           name="keywords"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Keywords</FormLabel>
+              <FormLabel>{t("keywords")}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Keywords"
+                  placeholder={t("keywords")}
                   value={keywords.join(",")}
                   onChange={(e) => setKeywords(e.target.value.split(","))}
                 />
               </FormControl>
-              <FormDescription>The keywords of the page.</FormDescription>
+              <FormDescription>{t("keywords_description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -168,20 +181,42 @@ export default function EditPageForm({
           name="published"
           render={({ field }) => (
             <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-              <FormLabel className="w-32">Published</FormLabel>
+              <FormLabel className="w-32">{t("published")}</FormLabel>
               <FormControl>
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormDescription>Whether the page is published.</FormDescription>
+              <FormDescription>{t("published_description")}</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="language"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("language")}</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder={t("language")} />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="en">{t("english")}</SelectItem>
+                  <SelectItem value="de">{t("german")}</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription>{t("language_description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Updating..." : "Update"}
+          {isPending ? t("updating") : t("update")}
         </Button>
       </form>
     </Form>

@@ -2,6 +2,7 @@ import { canEditBlogPost, NewBlogPostSchema, UpdateBlogPostSchema } from "~/type
 import { createTRPCRouter, protectedProcedure, adminProcedure, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { canPostBlogPosts, canPostBlogPostAsPageOwner } from "~/types/blog.types";
+import { getLocale } from "next-intl/server";
 
 export const blogRouter = createTRPCRouter({
   /**
@@ -28,9 +29,10 @@ export const blogRouter = createTRPCRouter({
   /**
    * Function to get page owner blog posts
    */
-  getPageOwnerBlogPosts: publicProcedure.input(z.object({ limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
+  getPageOwnerBlogPostsFromCurrentLocale: publicProcedure.input(z.object({ limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
+    const locale = await getLocale();
     const blogPosts = await ctx.db.blogPost.findMany({
-      where: { asPageOwner: true, published: true },
+      where: { asPageOwner: true, published: true, language: locale },
       orderBy: { createdAt: "desc" },
       take: input?.limit,
     });
@@ -47,11 +49,12 @@ export const blogRouter = createTRPCRouter({
     return blogPosts;
   }),
   /**
-   * Function to get all blog posts from users
+   * Function to get all blog posts from users from the current locale
    */
-  getUsersBlogPosts: publicProcedure.input(z.object({ limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
+  getUsersBlogPostsFromCurrentLocale: publicProcedure.input(z.object({ limit: z.number().optional() }).optional()).query(async ({ input, ctx }) => {
+    const locale = await getLocale();
     const blogPosts = await ctx.db.blogPost.findMany({
-      where: { asPageOwner: false, published: true },
+      where: { asPageOwner: false, published: true, language: locale },
       orderBy: { createdAt: "desc" },
       take: input?.limit,
     });
@@ -95,8 +98,11 @@ export const blogRouter = createTRPCRouter({
    * Function to create a new blog post
    */
   createBlogPost: protectedProcedure.input(NewBlogPostSchema).mutation(async ({ input, ctx }) => {
-    const { title, content, keywords, asPageOwner } = input;
-    if (!canPostBlogPosts({ user: ctx.session.user })) {
+    const { title, content, keywords, asPageOwner, language } = input;
+    if (
+      !(canPostBlogPosts({ user: ctx.session.user }) ||
+        canPostBlogPostAsPageOwner({ user: ctx.session.user }))
+    ) {
       throw new Error("You are not allowed to post blog posts");
     }
     if (asPageOwner && !canPostBlogPostAsPageOwner({ user: ctx.session.user })) {
@@ -112,6 +118,7 @@ export const blogRouter = createTRPCRouter({
         keywords,
         createdById: ctx.session.user.id,
         asPageOwner,
+        language,
       },
     });
     return blogPost;
@@ -120,7 +127,7 @@ export const blogRouter = createTRPCRouter({
    * Function to update a blog post
    */
   updateBlogPost: protectedProcedure.input(UpdateBlogPostSchema).mutation(async ({ input, ctx }) => {
-    const { title, content, slug, published, keywords, asPageOwner } = input;
+    const { title, content, slug, published, keywords, asPageOwner, language } = input;
     const post = await ctx.db.blogPost.findUnique({
       where: { slug },
     });
@@ -132,7 +139,7 @@ export const blogRouter = createTRPCRouter({
     }
     const updatedBlogPost = await ctx.db.blogPost.update({
       where: { slug },
-      data: { title, content, published, keywords, asPageOwner },
+      data: { title, content, published, keywords, asPageOwner, language },
     });
     return updatedBlogPost;
   }),

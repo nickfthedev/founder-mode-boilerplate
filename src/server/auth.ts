@@ -25,6 +25,7 @@ declare module "next-auth" {
       public: boolean;
       username?: string | null | undefined;
       userRole: "ADMIN" | "USER";
+      plan: "FREE" | "PREMIUM";
     } & DefaultSession["user"];
   }
 
@@ -34,6 +35,7 @@ declare module "next-auth" {
     bannedFromPosting: boolean;
     public: boolean;
     username?: string | null | undefined;
+    plan: "FREE" | "PREMIUM";
   }
 }
 
@@ -43,6 +45,9 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  // pages: {
+  //   signIn: "/login",
+  // },
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
@@ -53,6 +58,7 @@ export const authOptions: NextAuthOptions = {
         bannedFromPosting: user.bannedFromPosting,
         public: user.public,
         username: user.username,
+        plan: user.plan,
       },
     }),
   },

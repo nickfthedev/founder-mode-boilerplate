@@ -5,12 +5,13 @@ export const NewPageSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters long" }),
   content: z.string().min(10, { message: "Content must be at least 10 characters long" }),
   keywords: z.array(z.string()),
+  language: z.enum(["en", "de"]), // Add this line
 });
 
 export const UpdatePageSchema = NewPageSchema.extend({
+  id: z.number().optional(),
   slug: z.string(),
   published: z.boolean(),
-  keywords: z.array(z.string()),
 });
 
 export function canCreatePages({ user }: { user?: { userRole: UserRole } }) {

@@ -22,6 +22,7 @@ enum UserRole {
 model BlogPost {
     id        Int      @id @default(autoincrement())
     title     String
+    language  String   @default("en")
     slug      String   @unique
     published Boolean  @default(false)
     content   String
@@ -34,11 +35,13 @@ model BlogPost {
     createdById String
 
     @@index([title])
+    @@index([language, slug])
 }
 
 model Page {
     id        Int      @id @default(autoincrement())
     title     String
+    language  String   @default("en")
     slug      String   @unique
     published Boolean  @default(false)
     content   String
@@ -50,6 +53,7 @@ model Page {
     createdById String
 
     @@index([title])
+    @@index([language, slug])
 }
 // Necessary for Next auth
 model Account {
@@ -79,6 +83,11 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum Plan {
+    FREE
+    PREMIUM
+}
+
 model User {
     id            String    @id @default(cuid())
     name          String?
@@ -89,6 +98,8 @@ model User {
     public        Boolean   @default(false)
     // Stripe
     stripeCustomerId String?
+    // Plan
+    plan             Plan      @default(FREE)
     // Socials
     twitter       String?
     instagram     String?
@@ -109,7 +120,7 @@ model User {
     sessions      Session[]
     posts         BlogPost[]
     pages         Page[]
-    projects      Project[]
+    generatedStories Story[]
 }
 
 model Newsletter {
@@ -128,17 +139,31 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-// Users can claim projects to add them to their portfolio
-model Project {
-    id          Int      @id @default(autoincrement())
-    slug        String   @unique
-    name        String
-    url         String
+enum StoryStatus {
+    GENERATING
+    DONE
+    FAILED
+}
+
+model Story {
+    id String @id @default(cuid())
+    prompt String
+    status StoryStatus @default(GENERATING)
+    // Default to published, but maybe bad reviews stories should be unpublished automatically
+    published Boolean @default(true)
+    // 
+    title String?
     description String?
-    logo        String?
-    keywords    String[]
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    claimedBy   User?    @relation(fields: [claimedById], references: [id])
-    claimedById String?
+    keywords String[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    // Contentparts and images should be matched up
+    contentParts String[]
+    images String[]
+    // Votes
+    thumbsUp Int @default(0)
+    thumbsDown Int @default(0)
+    // User who generated the story
+    generatedBy User @relation(fields: [generatedById], references: [id])
+    generatedById String
 }

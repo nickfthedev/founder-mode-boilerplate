@@ -19,6 +19,7 @@ import {
   FormDescription,
   FormMessage,
 } from "../ui/form";
+import { useTranslations } from "next-intl";
 
 interface EditProfileFormProps {
   email?: string | null | undefined;
@@ -47,6 +48,7 @@ export default function EditProfileForm({
   acceptedMarketing: boolean;
 }) {
   const { toast } = useToast();
+  const t = useTranslations("Profile");
 
   const form = useForm<z.infer<typeof UpdateProfileSchema>>({
     resolver: zodResolver(UpdateProfileSchema),
@@ -73,14 +75,14 @@ export default function EditProfileForm({
   const { isPending, mutate, data } = api.user.updateProfile.useMutation({
     onSuccess: (data) => {
       toast({
-        title: "Profile updated successfully.",
-        description: "Your profile has been updated successfully.",
+        title: t("profile_updated_success"),
+        description: t("profile_updated_success_description"),
       });
     },
     onError: (error) => {
       toast({
-        title: "Error",
-        description: `Error: ${error.message}`,
+        title: t("error"),
+        description: `${t("error")}: ${error.message}`,
       });
     },
   });
@@ -98,11 +100,11 @@ export default function EditProfileForm({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormItem>
-            <FormLabel>Your Email</FormLabel>
+            <FormLabel>{t("your_email")}</FormLabel>
             <FormControl>
               <Input value={user.email ?? ""} disabled />
             </FormControl>
-            <FormDescription>You cannot change your email.</FormDescription>
+            <FormDescription>{t("email_cannot_change")}</FormDescription>
             <FormMessage />
           </FormItem>
 
@@ -112,11 +114,11 @@ export default function EditProfileForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>{t("name")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Name" {...field} />
+                  <Input placeholder={t("name")} {...field} />
                 </FormControl>
-                <FormDescription>Your name</FormDescription>
+                <FormDescription>{t("your_name")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -128,14 +130,11 @@ export default function EditProfileForm({
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>{t("username")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Username" {...field} />
+                  <Input placeholder={t("username")} {...field} />
                 </FormControl>
-                <FormDescription>
-                  Your username. Must be unique. Will be used for your public
-                  profile link.
-                </FormDescription>
+                <FormDescription>{t("username_description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -147,40 +146,43 @@ export default function EditProfileForm({
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Bio</FormLabel>
+                <FormLabel>{t("bio")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Bio" {...field} />
+                  <Input placeholder={t("bio")} {...field} />
                 </FormControl>
-                <FormDescription>Your bio</FormDescription>
+                <FormDescription>{t("your_bio")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           {/* Location */}
           <FormField
             control={form.control}
             name="location"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Location</FormLabel>
+                <FormLabel>{t("location")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Location" {...field} />
+                  <Input placeholder={t("location")} {...field} />
                 </FormControl>
-                <FormDescription>Your location</FormDescription>
+                <FormDescription>{t("your_location")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* Website */}
           <FormField
             control={form.control}
             name="website"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Website</FormLabel>
+                <FormLabel>{t("website")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Website" {...field} />
+                  <Input placeholder={t("website")} {...field} />
                 </FormControl>
-                <FormDescription>Your website</FormDescription>
+                <FormDescription>{t("your_website")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -193,7 +195,7 @@ export default function EditProfileForm({
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center gap-2">
-                  <FormLabel>Receive Marketing Emails</FormLabel>
+                  <FormLabel>{t("receive_marketing_emails")}</FormLabel>
                   <FormControl>
                     <Switch
                       checked={field.value}
@@ -202,23 +204,21 @@ export default function EditProfileForm({
                   </FormControl>
                 </div>
                 <FormDescription>
-                  You will receive marketing emails from us.
+                  {t("marketing_emails_description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/*
-           * Public Profile
-           */}
+          {/* Public Profile */}
           <FormField
             control={form.control}
             name="public"
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center gap-2">
-                  <FormLabel>Public Profile</FormLabel>
+                  <FormLabel>{t("public_profile")}</FormLabel>
                   <FormControl>
                     <Switch
                       checked={field.value}
@@ -227,7 +227,7 @@ export default function EditProfileForm({
                   </FormControl>
                 </div>
                 <FormDescription>
-                  If enabled, your profile will be visible to everyone.
+                  {t("public_profile_description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -235,24 +235,23 @@ export default function EditProfileForm({
           />
 
           <Button type="submit" disabled={isPending} className="w-full">
-            {isPending ? "Updating..." : "Update"}
+            {isPending ? t("updating") : t("update")}
           </Button>
-          {/*
-           * Social Links
-           */}
 
-          <h1 className="text-xl font-semibold">Social Links</h1>
+          {/* Social Links */}
+          <h1 className="text-xl font-semibold">{t("social_links")}</h1>
+
           {/* Facebook */}
           <FormField
             control={form.control}
             name="facebook"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Facebook</FormLabel>
+                <FormLabel>{t("facebook")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Facebook" {...field} />
+                  <Input placeholder={t("facebook")} {...field} />
                 </FormControl>
-                <FormDescription>Your Facebook page</FormDescription>
+                <FormDescription>{t("your_facebook")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -264,11 +263,11 @@ export default function EditProfileForm({
             name="instagram"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Instagram</FormLabel>
+                <FormLabel>{t("instagram")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Instagram" {...field} />
+                  <Input placeholder={t("instagram")} {...field} />
                 </FormControl>
-                <FormDescription>Your Instagram page</FormDescription>
+                <FormDescription>{t("your_instagram")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -280,11 +279,11 @@ export default function EditProfileForm({
             name="twitter"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Twitter</FormLabel>
+                <FormLabel>{t("twitter")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Twitter" {...field} />
+                  <Input placeholder={t("twitter")} {...field} />
                 </FormControl>
-                <FormDescription>Your Twitter page</FormDescription>
+                <FormDescription>{t("your_twitter")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -296,11 +295,11 @@ export default function EditProfileForm({
             name="linkedin"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>LinkedIn</FormLabel>
+                <FormLabel>{t("linkedin")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="LinkedIn" {...field} />
+                  <Input placeholder={t("linkedin")} {...field} />
                 </FormControl>
-                <FormDescription>Your LinkedIn page</FormDescription>
+                <FormDescription>{t("your_linkedin")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -312,11 +311,11 @@ export default function EditProfileForm({
             name="youtube"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>YouTube</FormLabel>
+                <FormLabel>{t("youtube")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="YouTube" {...field} />
+                  <Input placeholder={t("youtube")} {...field} />
                 </FormControl>
-                <FormDescription>Your YouTube page</FormDescription>
+                <FormDescription>{t("your_youtube")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -328,11 +327,11 @@ export default function EditProfileForm({
             name="tiktok"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>TikTok</FormLabel>
+                <FormLabel>{t("tiktok")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="TikTok" {...field} />
+                  <Input placeholder={t("tiktok")} {...field} />
                 </FormControl>
-                <FormDescription>Your TikTok page</FormDescription>
+                <FormDescription>{t("your_tiktok")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -344,11 +343,11 @@ export default function EditProfileForm({
             name="github"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>GitHub</FormLabel>
+                <FormLabel>{t("github")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="GitHub" {...field} />
+                  <Input placeholder={t("github")} {...field} />
                 </FormControl>
-                <FormDescription>Your GitHub page</FormDescription>
+                <FormDescription>{t("your_github")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -360,11 +359,11 @@ export default function EditProfileForm({
             name="discord"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Discord</FormLabel>
+                <FormLabel>{t("discord")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Discord" {...field} />
+                  <Input placeholder={t("discord")} {...field} />
                 </FormControl>
-                <FormDescription>Your Discord page</FormDescription>
+                <FormDescription>{t("your_discord")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -376,18 +375,18 @@ export default function EditProfileForm({
             name="twitch"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Twitch</FormLabel>
+                <FormLabel>{t("twitch")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Twitch" {...field} />
+                  <Input placeholder={t("twitch")} {...field} />
                 </FormControl>
-                <FormDescription>Your Twitch page</FormDescription>
+                <FormDescription>{t("your_twitch")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
 
           <Button type="submit" disabled={isPending} className="w-full">
-            {isPending ? "Updating..." : "Update"}
+            {isPending ? t("updating") : t("update")}
           </Button>
         </form>
       </Form>

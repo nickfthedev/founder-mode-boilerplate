@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { Link } from "~/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
 interface PageOwnerPosts {
   title: string;
@@ -11,11 +12,21 @@ interface PageOwnerPosts {
   createdAt: Date;
   updatedAt: Date;
   createdById: string;
+  language: string;
 }
 
-export function BlogPostList({ posts }: { posts: PageOwnerPosts[] }) {
+export async function BlogPostList({
+  posts,
+  showBadgePageOwner = false,
+  showLanguage = false,
+}: {
+  posts: PageOwnerPosts[];
+  showBadgePageOwner?: boolean;
+  showLanguage?: boolean;
+}) {
+  const t = await getTranslations("Blog");
   if (posts.length === 0) {
-    return <div className="text-muted-foreground">No posts yet</div>;
+    return <div className="text-muted-foreground">{t("no_posts_yet")}</div>;
   }
 
   return (
@@ -26,18 +37,33 @@ export function BlogPostList({ posts }: { posts: PageOwnerPosts[] }) {
             <Link href={`/blog/post/${post.slug}`}>{post.title}</Link>
             {post.published ? null : (
               <span className="rounded-xl bg-secondary p-1 text-xs text-muted-foreground">
-                (Draft)
+                {t("draft")}
+              </span>
+            )}
+            {showBadgePageOwner && post.asPageOwner && (
+              <span className="rounded-xl bg-secondary p-1 text-xs text-muted-foreground">
+                {t("as_page_owner")}
+              </span>
+            )}
+            {showLanguage && (
+              <span className="rounded-xl bg-secondary p-1 text-xs text-muted-foreground">
+                {post.language}
               </span>
             )}
           </h2>
           <span className="text-sm text-muted-foreground">
-            Created: {post.createdAt.toLocaleDateString()} / Updated:{" "}
-            {post.updatedAt.toLocaleDateString()}
+            {t("created")}: {post.createdAt.toLocaleDateString()} /{" "}
+            {t("updated")}: {post.updatedAt.toLocaleDateString()}
           </span>
           <div>
             <span className="text-sm text-muted-foreground">
-              {post.content.replace(/[#_*~`>]/g, "").slice(0, 100)}...
-              <Link href={`/blog/post/${post.slug}`}>Read more</Link>
+              {post.content.replace(/[#_*~`>]/g, "").slice(0, 100)}...{" "}
+              <Link
+                className="text-primary/50"
+                href={`/blog/post/${post.slug}`}
+              >
+                {t("read_more")}
+              </Link>
             </span>
           </div>
         </div>

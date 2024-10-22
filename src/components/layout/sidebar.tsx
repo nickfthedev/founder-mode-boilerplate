@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "~/i18n/routing";
+import { default as NextLink } from "next/link";
 import { Button } from "~/components/ui/button";
 import { ThemeToggle } from "./theme-switcher";
 import {
@@ -20,12 +21,16 @@ import {
   UserCircle,
   MessageCircleIcon,
 } from "lucide-react";
-import { canPostBlogPosts } from "~/types/blog.types";
+import {
+  canPostBlogPostAsPageOwner,
+  canPostBlogPosts,
+} from "~/types/blog.types";
 import { DialogTitle, DialogDescription } from "@radix-ui/react-dialog";
 import { UserRole } from "~/types/user.types";
-import { HomeIcon, NewspaperIcon, UsersIcon, ActivityIcon } from "lucide-react";
+import { HomeIcon, NewspaperIcon, BookIcon } from "lucide-react";
 import { useState } from "react";
 import { canCreatePages } from "~/types/page.types";
+import { useTranslations } from "next-intl";
 
 export type Navigation = {
   href: string;
@@ -33,16 +38,19 @@ export type Navigation = {
   icon: React.ElementType;
 };
 
-const navigation: Navigation[] = [
-  { href: "/", label: "Home", icon: HomeIcon },
-  { href: "/blog", label: "Blog", icon: NewspaperIcon },
-  { href: "/contact", label: "Contact", icon: MessageCircleIcon },
-];
-
 /**
  * Desktop Sidebar
  */
 export function SidebarDesktop() {
+  const t = useTranslations("Sidebar");
+
+  const navigation: Navigation[] = [
+    { href: "/", label: t("home"), icon: HomeIcon },
+    { href: "/stories", label: t("stories"), icon: BookIcon },
+    { href: "/blog", label: t("blog"), icon: NewspaperIcon },
+    { href: "/contact", label: t("contact"), icon: MessageCircleIcon },
+  ];
+
   return (
     <nav className="space-y-1">
       {navigation.map((item) => (
@@ -75,19 +83,27 @@ export function SidebarMobile({
   };
 }) {
   const [open, setOpen] = useState(false);
+  const t = useTranslations("Sidebar");
+
+  const navigation: Navigation[] = [
+    { href: "/", label: t("home"), icon: HomeIcon },
+    { href: "/stories", label: t("stories"), icon: BookIcon },
+    { href: "/blog", label: t("blog"), icon: NewspaperIcon },
+    { href: "/contact", label: t("contact"), icon: MessageCircleIcon },
+  ];
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon">
           <MenuIcon className="h-6 w-6" />
-          <span className="sr-only">Toggle navigation</span>
+          <span className="sr-only">{t("toggle_navigation")}</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-64">
-        <DialogTitle className="sr-only">Navigation</DialogTitle>
+        <DialogTitle className="sr-only">{t("toggle_navigation")}</DialogTitle>
         <DialogDescription className="sr-only">
-          Navigation menu
+          {t("toggle_navigation")}
         </DialogDescription>
         <div className="flex h-full flex-col justify-between px-4 py-6">
           <div className="space-y-6">
@@ -129,28 +145,31 @@ export function SidebarUserMenu({
   };
   setOpen?: (open: boolean) => void;
 }) {
+  const t = useTranslations("Sidebar");
+
   return (
     <div className="space-y-4">
       {user ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="w-full">
-              My Account
+              {t("my_account")}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuLabel className="text-sm font-medium text-muted-foreground">
-              Hello, {user.name}
+              {t("welcome", { name: user.name })}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <Link href="/profile" onClick={() => setOpen && setOpen(false)}>
               <DropdownMenuItem>
                 <UserCircle className="mr-2 h-4 w-4" />
-                My Profile
+                {t("my_profile")}
               </DropdownMenuItem>
             </Link>
             <DropdownMenuSeparator />
-            {canPostBlogPosts({ user }) && (
+            {(canPostBlogPosts({ user }) ||
+              canPostBlogPostAsPageOwner({ user })) && (
               <>
                 <Link
                   href="/blog/new"
@@ -158,18 +177,19 @@ export function SidebarUserMenu({
                 >
                   <DropdownMenuItem>
                     <PlusIcon className="mr-2 h-4 w-4" />
-                    New Blogpost
+                    {t("new_blogpost")}
                   </DropdownMenuItem>
                 </Link>
                 <Link href="/blog/my" onClick={() => setOpen && setOpen(false)}>
                   <DropdownMenuItem>
                     <FileIcon className="mr-2 h-4 w-4" />
-                    My Blogposts
+                    {t("my_blogposts")}
                   </DropdownMenuItem>
                 </Link>
+
+                <DropdownMenuSeparator />
               </>
             )}
-            <DropdownMenuSeparator />
             {canCreatePages({ user }) && (
               <>
                 <Link
@@ -178,38 +198,38 @@ export function SidebarUserMenu({
                 >
                   <DropdownMenuItem>
                     <PlusIcon className="mr-2 h-4 w-4" />
-                    New Page
+                    {t("new_page")}
                   </DropdownMenuItem>
                 </Link>
                 <Link href={"/page"} onClick={() => setOpen && setOpen(false)}>
                   <DropdownMenuItem>
                     <FileIcon className="mr-2 h-4 w-4" />
-                    All Pages
+                    {t("all_pages")}
                   </DropdownMenuItem>
                 </Link>
 
                 <DropdownMenuSeparator />
               </>
             )}
-            <Link
+            <NextLink
               href="/api/auth/signout"
               onClick={() => setOpen && setOpen(false)}
             >
               <DropdownMenuItem>
                 <LogOutIcon className="mr-2 h-4 w-4" />
-                Logout
+                {t("logout")}
               </DropdownMenuItem>
-            </Link>
+            </NextLink>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
         <Button variant="outline" size="sm" className="w-full" asChild>
-          <Link
+          <NextLink
             href="/api/auth/signin"
             onClick={() => setOpen && setOpen(false)}
           >
-            Login
-          </Link>
+            {t("login")}
+          </NextLink>
         </Button>
       )}
       <ThemeToggle />

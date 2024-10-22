@@ -22,15 +22,25 @@ import { useEffect, useState } from "react";
 import BackButton from "../common/back-button";
 import { Switch } from "../ui/switch";
 import { UserRole } from "~/types/user.types";
+import { useTranslations } from "next-intl";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export default function NewBlogPostForm({ userRole }: { userRole: UserRole }) {
   const { toast } = useToast();
+  const t = useTranslations("Blog");
   const form = useForm<z.infer<typeof NewBlogPostSchema>>({
     resolver: zodResolver(NewBlogPostSchema),
     defaultValues: {
       title: "",
       content: "",
       asPageOwner: false,
+      language: "en",
     },
   });
 
@@ -45,7 +55,7 @@ export default function NewBlogPostForm({ userRole }: { userRole: UserRole }) {
   const { mutate, isPending } = api.blog.createBlogPost.useMutation({
     onSuccess: () => {
       toast({
-        title: "Blog post created successfully",
+        title: t("blog_post_created_success"),
       });
       form.reset();
     },
@@ -53,7 +63,7 @@ export default function NewBlogPostForm({ userRole }: { userRole: UserRole }) {
       console.error(error);
       toast({
         variant: "destructive",
-        title: "Failed to create blog post",
+        title: t("blog_post_creation_failed"),
         description: error.message,
       });
     },
@@ -70,7 +80,7 @@ export default function NewBlogPostForm({ userRole }: { userRole: UserRole }) {
     <>
       <div className="flex flex-row items-center gap-4">
         <BackButton />
-        <h1 className="text-2xl font-bold">New Blog Post</h1>
+        <h1 className="text-2xl font-bold">{t("new_blog_post")}</h1>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -79,11 +89,11 @@ export default function NewBlogPostForm({ userRole }: { userRole: UserRole }) {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>{t("title")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Title" {...field} />
+                  <Input placeholder={t("title")} {...field} />
                 </FormControl>
-                <FormDescription>The title of the blog post.</FormDescription>
+                <FormDescription>{t("title_description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -93,11 +103,11 @@ export default function NewBlogPostForm({ userRole }: { userRole: UserRole }) {
             name="content"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Content</FormLabel>
+                <FormLabel>{t("content")}</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Content" rows={10} {...field} />
+                  <Textarea placeholder={t("content")} rows={10} {...field} />
                 </FormControl>
-                <FormDescription>The content of the blog post.</FormDescription>
+                <FormDescription>{t("content_description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -107,17 +117,15 @@ export default function NewBlogPostForm({ userRole }: { userRole: UserRole }) {
             name="keywords"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Keywords</FormLabel>
+                <FormLabel>{t("keywords")}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Keywords"
+                    placeholder={t("keywords")}
                     value={keywords.join(",")}
                     onChange={(e) => setKeywords(e.target.value.split(","))}
                   />
                 </FormControl>
-                <FormDescription>
-                  The keywords of the blog post as a comma separated list.
-                </FormDescription>
+                <FormDescription>{t("keywords_description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -128,21 +136,48 @@ export default function NewBlogPostForm({ userRole }: { userRole: UserRole }) {
               name="asPageOwner"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                  <FormLabel>Admin</FormLabel>
+                  <FormLabel>{t("as_page_owner")}</FormLabel>
                   <FormControl>
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <FormDescription>Post as the Page owner</FormDescription>
+                  <FormDescription>
+                    {t("as_page_owner_description")}
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           )}
+          <FormField
+            control={form.control}
+            name="language"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("language")}</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("language")} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="en">{t("english")}</SelectItem>
+                    <SelectItem value="de">{t("german")}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>{t("language_description")}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <Button type="submit" disabled={isPending} className="w-full">
-            {isPending ? "Submitting..." : "Submit"}
+            {isPending ? t("submitting") : t("submit")}
           </Button>
         </form>
       </Form>

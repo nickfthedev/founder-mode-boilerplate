@@ -22,6 +22,7 @@ import {
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
+import { useTranslations } from "next-intl";
 
 // Wrap your component with this provider in a parent component or _app.tsx
 export function ReCaptchaProvider({ children }: { children: React.ReactNode }) {
@@ -37,6 +38,7 @@ export function ReCaptchaProvider({ children }: { children: React.ReactNode }) {
 export default function ContactForm() {
   const { toast } = useToast();
   const { executeRecaptcha } = useGoogleReCaptcha();
+  const t = useTranslations("Contact");
 
   const form = useForm<z.infer<typeof ContactSchema>>({
     resolver: zodResolver(ContactSchema),
@@ -52,13 +54,13 @@ export default function ContactForm() {
   const mutate = api.contact.sendMessage.useMutation({
     onSuccess: () => {
       toast({
-        title: "Message sent",
+        title: t("message_sent"),
       });
       form.reset();
     },
     onError: (error) => {
       toast({
-        title: "Error",
+        title: t("error"),
         variant: "destructive",
         description: error.message,
       });
@@ -67,9 +69,9 @@ export default function ContactForm() {
   const onSubmit = async (values: z.infer<typeof ContactSchema>) => {
     if (!executeRecaptcha) {
       toast({
-        title: "Error",
+        title: t("error"),
         variant: "destructive",
-        description: "reCAPTCHA not available",
+        description: t("recaptcha_error"),
       });
       return;
     }
@@ -83,17 +85,17 @@ export default function ContactForm() {
       <Card className="my-8 w-full max-w-3xl">
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader>
-            <CardTitle>Contact</CardTitle>
-            <CardDescription>We are happy to hear from you</CardDescription>
+            <CardTitle>{t("title")}</CardTitle>
+            <CardDescription>{t("description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Your email"
+                  placeholder={t("email_placeholder")}
                   {...form.register("email")}
                 />
                 {form.formState.errors.email?.message && (
@@ -103,11 +105,11 @@ export default function ContactForm() {
                 )}
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">{t("name")}</Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Your name"
+                  placeholder={t("name_placeholder")}
                   {...form.register("name")}
                 />
                 {form.formState.errors.name?.message && (
@@ -118,11 +120,11 @@ export default function ContactForm() {
               </div>
 
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="subject">Betreff</Label>
+                <Label htmlFor="subject">{t("subject")}</Label>
                 <Input
                   id="subject"
                   type="text"
-                  placeholder="Subject"
+                  placeholder={t("subject_placeholder")}
                   {...form.register("subject")}
                 />
                 {form.formState.errors.subject?.message && (
@@ -132,10 +134,10 @@ export default function ContactForm() {
                 )}
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="message">Nachricht</Label>
+                <Label htmlFor="message">{t("message")}</Label>
                 <Textarea
                   id="message"
-                  placeholder="Your message"
+                  placeholder={t("message_placeholder")}
                   {...form.register("message")}
                 />
                 {form.formState.errors.message?.message && (
@@ -148,7 +150,7 @@ export default function ContactForm() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-2">
             <Button type="submit" className="w-full">
-              Send
+              {mutate.isPending ? t("sending") : t("send")}
             </Button>
           </CardFooter>
         </form>

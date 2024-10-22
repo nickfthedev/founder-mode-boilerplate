@@ -1,8 +1,8 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/i18n/routing";
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { Link } from "~/i18n/routing";
 
 function BackButton({
   className,

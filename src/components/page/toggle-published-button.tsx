@@ -3,7 +3,8 @@
 import { useToast } from "~/hooks/use-toast";
 import { api } from "~/trpc/react";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter } from "~/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export function TogglePublishedButton({
   slug,
@@ -15,10 +16,12 @@ export function TogglePublishedButton({
   const utils = api.useUtils();
   const router = useRouter();
   const { toast } = useToast();
+  const t = useTranslations("Page");
+
   const togglePublish = api.page.togglePublished.useMutation({
     onSuccess: async () => {
       toast({
-        title: `Page ${published ? "unpublished" : "published"}`,
+        title: published ? t("page_unpublished") : t("page_published"),
       });
       await utils.page.getPageBySlug.invalidate(slug);
       await utils.page.getAllPages.invalidate();
@@ -27,7 +30,7 @@ export function TogglePublishedButton({
     onError: (error) => {
       toast({
         variant: "destructive",
-        title: "Failed to toggle publish",
+        title: t("failed_to_toggle_publish"),
         description: error.message,
       });
     },
@@ -38,7 +41,7 @@ export function TogglePublishedButton({
       onClick={() => togglePublish.mutate(slug)}
       disabled={togglePublish.isPending}
     >
-      {published ? "Unpublish" : "Publish"}
+      {published ? t("unpublish") : t("publish")}
     </Button>
   );
 }
